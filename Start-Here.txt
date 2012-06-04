@@ -1,1 +1,5 @@
 Welcome to the linux admin toolkit 00.00.01
+
+# to deploy
+scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/
+rsync -avz /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/
