@@ -1,0 +1,4 @@
+database_host = 192.168.xxx.xxx
+database_user = not
+database_pass = tellingyou
+database_schema = linux-admin-toolkit

@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS `linux-admin-toolkit`;
 
-CREATE DATABASE  IF NOT EXISTS `linux-admin-toolkit` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE IF NOT EXISTS `linux-admin-toolkit` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `linux-admin-toolkit`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
 --

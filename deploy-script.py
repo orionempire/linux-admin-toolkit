@@ -4,7 +4,7 @@ import os
 
 #implies a saved ssh key
 
-# deploy our config
+# deploy our application
 os.system("rsync -avz --delete /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/")
 
 # over write the dummy values

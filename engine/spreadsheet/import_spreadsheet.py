@@ -13,15 +13,16 @@ import xlrd             #@UnresolvedImport
 from configobj import ConfigObj #@UnresolvedImport
 
 
-config_path = os.getcwd()+"/../../local-config/"
-#config_path = "/tmp/local-config/"
+#config_path = os.getcwd()+"/../../local-config/"
+config_path = "/tmp/local-config/"
 
 # load configuration data
 config = ConfigObj(config_path+"import_spreadsheet_config.dat")
+dbconfig = ConfigObj(config_path+"database_config.dat")
 
 def main() :    
     # connect to the database using values in the config file
-    db_connection = MySQLdb.connect(config['database_host'],config['database_user'], config['database_pass'],config['database_schema'])
+    db_connection = MySQLdb.connect(dbconfig['database_host'],dbconfig['database_user'], dbconfig['database_pass'], dbconfig['database_schema'])
     # open the spread sheet
     spread_sheet = config_path+config['spreadsheet_name']
     book = xlrd.open_workbook(spread_sheet)
@@ -33,7 +34,7 @@ def main() :
         worksheet = book.sheet_by_name(sheet_to_load)
         
         for database_table in config['import_map'][sheet_to_load] :
-            print "Populating "+database_table+" in "+config['database_schema']
+            print "Populating "+database_table+" in "+dbconfig['database_schema']
             
             # the 1 skips the header row
             for row_index in xrange(1,worksheet.nrows):
