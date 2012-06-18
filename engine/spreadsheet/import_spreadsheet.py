@@ -13,12 +13,12 @@ import xlrd             #@UnresolvedImport
 from configobj import ConfigObj #@UnresolvedImport
 
 
-#config_path = os.getcwd()+"/../../local-config/"
+#config_path = os.path.abspath(__file__+"/../../../local-config/")
 config_path = "/tmp/local-config/"
 
 # load configuration data
-config = ConfigObj(config_path+"import_spreadsheet_config.dat")
-dbconfig = ConfigObj(config_path+"database_config.dat")
+config = ConfigObj(config_path+"/import_spreadsheet_config.dat")
+dbconfig = ConfigObj(config_path+"/database_config.dat")
 
 def main() :    
     # connect to the database using values in the config file

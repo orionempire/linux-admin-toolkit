@@ -13,15 +13,15 @@ import MySQLdb          #@UnresolvedImport
 # Modules installed with EasyInstall 
 from configobj import ConfigObj #@UnresolvedImport
 
-config_path = os.getcwd()+"/../../local-config/"
+config_path = os.path.abspath(__file__+"/../../../local-config/")
 #config_path = "/tmp/local-config/"
 
 # load configuration data
-dbconfig = ConfigObj(config_path+"database_config.dat")
+dbconfig = ConfigObj(config_path+"/database_config.dat")
 
 # build the file /etc/clusters based on the database
 def build_cluster() :
-     
+    
     # connect to the database using values in the config file
     database_connection = MySQLdb.connect(dbconfig['database_host'],dbconfig['database_user'], dbconfig['database_pass'],dbconfig['database_schema'])
     
