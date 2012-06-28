@@ -1,4 +1,14 @@
-Welcome to the linux admin toolkit 00.00.01
+# Welcome to the linux admin toolkit 00.00.01
+
+# Development creation steps
+# Ubuntu
+apt-get install python-setuptools python-dev build-essential
+apt-get install python-mysqldb
+apt-get install mysql-client-core-5.5
+
+
+mkdir /etc/linux-admin-toolkit/
+chmod 0777 /etc/linux-admin-toolkit/
 
 # to deploy
 scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/

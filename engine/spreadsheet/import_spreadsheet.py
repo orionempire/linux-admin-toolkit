@@ -13,18 +13,18 @@ import xlrd             #@UnresolvedImport
 from configobj import ConfigObj #@UnresolvedImport
 
 
-#config_path = os.path.abspath(__file__+"/../../../local-config/")
-config_path = "/tmp/local-config/"
+config_path = "/etc/linux-admin-toolkit/config_files/"
+data_path = "/etc/linux-admin-toolkit/data_files/"
 
 # load configuration data
-config = ConfigObj(config_path+"/import_spreadsheet_config.dat")
-dbconfig = ConfigObj(config_path+"/database_config.dat")
+config = ConfigObj(config_path+"import_spreadsheet_config.dat")
+dbconfig = ConfigObj(config_path+"database_config.dat")
 
 def main() :    
     # connect to the database using values in the config file
     db_connection = MySQLdb.connect(dbconfig['database_host'],dbconfig['database_user'], dbconfig['database_pass'], dbconfig['database_schema'])
     # open the spread sheet
-    spread_sheet = config_path+config['spreadsheet_name']
+    spread_sheet = data_path+config['spreadsheet_name']
     book = xlrd.open_workbook(spread_sheet)
     
     # iterate through every relevant spreadsheet sheet then iterate through every database table that is loaded from that sheet
