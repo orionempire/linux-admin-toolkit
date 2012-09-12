@@ -1,14 +1,30 @@
-# Welcome to the linux admin toolkit 00.00.01
+# Welcome to the linux admin toolkit 00.00.02
 
+# Create database
+CREATE SCHEMA `linux-admin-toolkit` ;
+
+# Create and populate local settings
+sudo mkdir -p /etc/linux-admin-toolkit/config_files/frontend/
+sudo mkdir -p /etc/linux-admin-toolkit/config_files/engine/
+sudo chmod -R a+r /etc/linux-admin-toolkit/
+
+# Populate database
+cd (proper_path)linux-admin-toolkit/frontend; python manage.py syncdb
+
+
+
+
+
+
+
+------------------------
+old
+------------------------
 # Development creation steps
 # Ubuntu
 apt-get install python-setuptools python-dev build-essential
 apt-get install python-mysqldb
 apt-get install mysql-client-core-5.5
-
-
-mkdir /etc/linux-admin-toolkit/
-chmod 0777 /etc/linux-admin-toolkit/
 
 # to deploy
 scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/
