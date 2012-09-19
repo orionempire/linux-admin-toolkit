@@ -1,7 +1,7 @@
 # Welcome to the linux admin toolkit 00.00.02
 
-# Create database
-CREATE SCHEMA `linux-admin-toolkit` ;
+# Create and populate database
+DROP SCHEMA `linux-admin-toolkit`;CREATE SCHEMA `linux-admin-toolkit` ;
 
 # Create and populate local settings
 sudo mkdir -p /etc/linux-admin-toolkit/config_files/frontend/
