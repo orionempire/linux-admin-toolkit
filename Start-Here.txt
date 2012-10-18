@@ -15,7 +15,18 @@ cd (proper_path)linux-admin-toolkit/frontend; python manage.py syncdb
 
 
 
-
+--------------------
+clear table data
+----------------------
+DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_additional_ip;
+DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_cluster_tag;
+DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_list;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_additional_ip;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_cluster_tag;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_details;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_list;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_additional_ip;
+DELETE FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_list ;
 
 ------------------------
 old
@@ -29,3 +40,20 @@ apt-get install mysql-client-core-5.5
 # to deploy
 scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/
 rsync -avz /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/
+
+
+#Notes
+#update query examples
+update
+    `linux-admin-toolkit`.admin_gui_physical_machine_list
+SET host_enclosure_name_id = (SELECT 
+    id
+FROM 
+    `linux-admin-toolkit`.admin_gui_physical_enclosure_list 
+WHERE 
+    enclosure_name = "nwr-pre-adm-mng02")
+where server_name = "seq-prd-adm-vir01";
+
+update `linux-admin-toolkit`.admin_gui_physical_machine_list SET host_enclosure_name_id = (SELECT id
+FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_list WHERE enclosure_name = "nwr-pre-adm-mng02")
+where server_name = "seq-prd-adm-vir01";

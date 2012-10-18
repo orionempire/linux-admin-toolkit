@@ -4,16 +4,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'frontend.views.home', name='home'),
-    # url(r'^frontend/', include('frontend.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-    url(r'^admin/', include(admin.site.urls)),
-    #url(r'^browse/',include(user_admin_site.urls)),
+urlpatterns = patterns('',    
+    url(r'^admin/', include(admin.site.urls)),    
+    url(r'^virtual_machine_list/','admin_gui.views.virtual_machine_list'),
+    url(r'^physical_machine_list/','admin_gui.views.physical_machine_list'),
+    url(r'^','admin_gui.views.default')
 )
