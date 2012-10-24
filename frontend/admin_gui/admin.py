@@ -17,8 +17,8 @@ class Physical_Enclosure_List_Admin(admin.ModelAdmin):
 admin.site.register(Physical_Enclosure_List, Physical_Enclosure_List_Admin)
 
 # Admin view of all physical servers and blades.
-class Physical_Machine_Details_Admin(admin.TabularInline):
-    model = Physical_Machine_Details
+class Physical_Machine_Detail_Admin(admin.TabularInline):
+    model = Physical_Machine_Detail
     
 class Physical_Machine_Cluster_Tag_Admin(admin.TabularInline):
     model = Physical_Machine_Cluster_Tag
@@ -29,12 +29,13 @@ class Physical_Machine_Additional_IP_Admin(admin.TabularInline):
     extra = 1
         
 class Physical_Machine_List_Admin(admin.ModelAdmin):
-    list_display = ['server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name']
+    list_display = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name']
     list_filter=['host_enclosure_name','role','purpose']
     list_editable = ['primary_ip_address', 'point_of_contact', 'role', 'purpose', 'host_enclosure_name']
     ordering = ['primary_ip_address']
     search_fields = ['host_enclosure_name','point_of_contact']
-    inlines = [Physical_Machine_Details_Admin, Physical_Machine_Additional_IP_Admin, Physical_Machine_Cluster_Tag_Admin]    
+    #inlines = [Physical_Machine_Detail_Admin, Physical_Machine_Additional_IP_Admin, Physical_Machine_Cluster_Tag_Admin]    
+    inlines = [Physical_Machine_Detail_Admin, Physical_Machine_Additional_IP_Admin, Physical_Machine_Cluster_Tag_Admin]
     
 admin.site.register(Physical_Machine_List, Physical_Machine_List_Admin)
 
@@ -48,7 +49,7 @@ class Virtual_Machine_Additional_IP_Admin(admin.TabularInline):
     extra = 1
         
 class Virtual_Machine_List_Admin(admin.ModelAdmin):
-    list_display = ['server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name']
+    list_display = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name']
     list_filter=['host_server_name','role','purpose']
     list_editable = ['primary_ip_address','point_of_contact','role','purpose', 'host_server_name']
     ordering = ['primary_ip_address']

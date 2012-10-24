@@ -14,13 +14,13 @@ class Physical_Enclosure_List(models.Model):
 
 # Model representing any additional IPs used by a blade enclosure.    
 class Physical_Enclosure_Additional_IP(models.Model):  
-    physical_enclosure_list = models.ForeignKey(Physical_Enclosure_List)
+    physical_enclosure_list = models.ForeignKey(Physical_Enclosure_List, to_field='enclosure_name')
     additional_ip = models.CharField(max_length=255)     
 
 # Model representing all servers and blades, both might host Virtual machines and blades
 # might be in a enclosure in which case its location is its slot.
 class Physical_Machine_List(models.Model):    
-    server_name = models.CharField(max_length=255,unique=True)
+    physical_server_name = models.CharField(max_length=255,unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
@@ -28,13 +28,14 @@ class Physical_Machine_List(models.Model):
     host_enclosure_name = models.ForeignKey(Physical_Enclosure_List, null=True, blank=True, on_delete=models.SET_NULL)
     
     def __unicode__(self):
-        return self.server_name
+        return self.physical_server_name
        
 
 # A one to one extension of the physical machine list   
 #TODO import and ensure cascade delete     
-class Physical_Machine_Details(models.Model):
-    physical_machine_list = models.OneToOneField(Physical_Machine_List)
+class Physical_Machine_Detail(models.Model):
+    physical_machine_list = models.OneToOneField(Physical_Machine_List, to_field='physical_server_name')
+    #physical_machine_list = models.OneToOneField(Physical_Machine_List)
     location_code = models.CharField(max_length=255)
     service_tag = models.CharField(max_length=255)
     console_address = models.CharField(max_length=255)
@@ -44,17 +45,17 @@ class Physical_Machine_Details(models.Model):
 
 # Model representing a list of tags that can be used for scripted admin actions
 class Physical_Machine_Cluster_Tag(models.Model):
-     physical_machine_list = models.ForeignKey(Physical_Machine_List)
+     physical_machine_list = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name')
      admin_cluster_group = models.CharField(max_length=255)
      
 # Model representing any additional IPs used by a physical server or blade.    
 class Physical_Machine_Additional_IP(models.Model):  
-    physical_machine_list = models.ForeignKey(Physical_Machine_List)
+    physical_machine_list = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name')
     additional_ip = models.CharField(max_length=255)       
  
 # Model representing a list of virtual machines. Must be hosted on a physical machine  
 class Virtual_Machine_List(models.Model):
-    server_name = models.CharField(max_length=255,unique=True)
+    virtual_server_name = models.CharField(max_length=255,unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)   
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
@@ -64,16 +65,16 @@ class Virtual_Machine_List(models.Model):
     os = models.CharField(max_length=255)
     base_image = models.CharField(max_length=255)
     def __unicode__(self):
-        return self.server_name
+        return self.virtual_server_name
 
 # Model representing a list of tags that can be used for scripted admin actions
 class Virtual_Machine_Cluster_Tag(models.Model):
-     physical_machine_list = models.ForeignKey(Virtual_Machine_List)
+     virtual_machine_list = models.ForeignKey(Virtual_Machine_List, to_field='virtual_server_name')
      admin_cluster_group = models.CharField(max_length=255)
      
 # Model representing any additional IPs used by virtual machines.    
 class Virtual_Machine_Additional_IP(models.Model):  
-    physical_machine_list = models.ForeignKey(Virtual_Machine_List)
+    virtual_machine_list = models.ForeignKey(Virtual_Machine_List, to_field='virtual_server_name')
     additional_ip = models.CharField(max_length=255) 
     
 class Storage_Device_List(models.Model):
@@ -90,5 +91,5 @@ class Storage_Device_List(models.Model):
     
 # Model representing any additional IPs used by a blade enclosure.    
 class Storage_Device_Additional_IP(models.Model):  
-    storage_device_list = models.ForeignKey(Storage_Device_List)
+    storage_device_list = models.ForeignKey(Storage_Device_List, to_field='device_name')
     additional_ip = models.CharField(max_length=255)      

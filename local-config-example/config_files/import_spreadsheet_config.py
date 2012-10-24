@@ -20,16 +20,25 @@ PRIMARY_KEY_MAP = {
     },
     'linux_physical' : {
         'admin_gui_physical_machine_list' : {
-            'server_name' : 1,
+            'physical_server_name' : 1,
             'primary_ip_address' : 2,
             'role' : 3,
             'purpose' : 4,
             'point_of_contact' : 5,            
-        }
+        },
+        'admin_gui_physical_machine_detail' : {
+            'physical_machine_list_id' : 1,
+            'location_code' : 7,
+            'service_tag' : 8,
+            'console_address' : 9,
+            'os' : 10,
+            'model' : 11,
+            'size' : 12                        
+        }  
     },
     'linux_virtual' : {
         'admin_gui_virtual_machine_list' : {
-            'server_name' : 1,
+            'virtual_server_name' : 1,
             'primary_ip_address' : 2,
             'role' : 3,
             'purpose' : 4,
@@ -37,7 +46,7 @@ PRIMARY_KEY_MAP = {
             'size' : 7,
             'os' : 8,
             'base_image' : 9,            
-        } 
+        }
     },
     'storage_infrastructure' : {
         'admin_gui_storage_device_list' : {
@@ -61,17 +70,64 @@ FORIEGN_KEY_MAP = {
         'select_sheet_column' : 6,
         'update_table' : 'admin_gui_physical_machine_list',
         'update_column' : 'host_enclosure_name_id',
-        'update_column_condition' : 'server_name',
+        'update_column_condition' : 'physical_server_name',
         'update_sheet_column' : 1
     },
     'linux_virtual' : {
         'select_table' : 'admin_gui_physical_machine_list',
         'select_column_source' : 'id',        
-        'select_column_condition' : 'server_name',
+        'select_column_condition' : 'physical_server_name',
         'select_sheet_column' : 6,
         'update_table' : 'admin_gui_virtual_machine_list',
         'update_column' : 'host_server_name_id',
-        'update_column_condition' : 'server_name',
+        'update_column_condition' : 'virtual_server_name',
         'update_sheet_column' : 1    
+    }
+}
+
+ONE_TO_MANY_MAP = {
+    'enclosures' : {
+        'additional_ip_' : {
+            'key_key' : 1,            
+            'database_table' : 'admin_gui_physical_enclosure_additional_ip',
+            'value_key' : 'physical_enclosure_list_id',
+            'value_value' : 'additional_ip'            
+        }     
+    },
+    'linux_physical' : {
+        'additional_ip_' : {
+            'key_key' : 1,            
+            'database_table' : 'admin_gui_physical_machine_additional_ip',
+            'value_key' : 'physical_machine_list_id',
+            'value_value' : 'additional_ip'
+        },
+        'admin_cluster_group_' : {
+            'key_key' : 1,            
+            'database_table' : 'admin_gui_physical_machine_cluster_tag',
+            'value_key' : 'physical_machine_list_id',
+            'value_value' : 'admin_cluster_group'            
+        }          
+    },
+    'linux_virtual' : {
+        'additional_ip_' : {
+            'key_key' : 1,            
+            'database_table' : 'admin_gui_virtual_machine_additional_ip',
+            'value_key' : 'virtual_machine_list_id',
+            'value_value' : 'additional_ip'
+        },
+        'admin_cluster_group_' : {
+            'key_key' : 1,
+            'database_table' : 'admin_gui_virtual_machine_cluster_tag',
+            'value_key' : 'virtual_machine_list_id',
+            'value_value' : 'admin_cluster_group'            
+        }          
+    },
+    'storage_infrastructure' : {
+        'additional_ip_' : {
+            'key_key' : 1,            
+            'database_table' : 'admin_gui_storage_device_additional_ip',
+            'value_key' : 'storage_device_list_id',
+            'value_value' : 'additional_ip'
+        }        
     }
 }

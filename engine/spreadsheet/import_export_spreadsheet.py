@@ -5,6 +5,7 @@ Created on Sept 19, 2012
 @author: David Davidson
 '''
 import imp
+import re
 #sudo pip install xlrd
 import xlrd             #@UnresolvedImport
 
@@ -18,8 +19,47 @@ config_file = imp.load_source('*', config_path+'config_files/import_spreadsheet_
 def do_import() :    
     do_import_primay_key_data()
     do_import_foriegn_key_data()
+    do_import_one_to_many()
 
-def do_import_foriegn_key_data() :
+def do_import_one_to_many() :
+    # connect to the database using values in the config file
+    db_connection = MySQLdb.connect(config_file.DATABASE_CONNECTION['HOST'],config_file.DATABASE_CONNECTION['USER'], config_file.DATABASE_CONNECTION['PASSWORD'], config_file.DATABASE_CONNECTION['SCHEMA'])
+    
+    # open the spread sheet
+    spread_sheet = config_path+"data_files/"+config_file.IMPORT_SPREADSHEET_NAME
+    book = xlrd.open_workbook(spread_sheet)
+    
+    # iterate through every relevant spreadsheet sheet then iterate through every database table that is loaded from that sheet
+    for sheet_to_load, regex_maping in config_file.ONE_TO_MANY_MAP.items() :       
+        print "Loading worksheet "+sheet_to_load+" from spreadsheet "+config_file.IMPORT_SPREADSHEET_NAME+"."    
+        worksheet = book.sheet_by_name(sheet_to_load)
+        for regex, data_maping in regex_maping.items() :
+            for column_header in xrange(1,worksheet.ncols):
+                pattern = re.compile(regex)
+                if( pattern.match(worksheet.row_values(0)[int(column_header)]) ) :                
+                # the 1 skips the header row
+                    for row_index in xrange(1,worksheet.nrows):
+                        cursor = db_connection.cursor ()
+                        #print worksheet.row_values(row_index)[int(column_header)]
+                        insert_query = "INSERT INTO "+data_maping['database_table']+" ("+data_maping['value_key']+", "
+                        insert_query += data_maping['value_value']+") VALUES (\""+worksheet.row_values(row_index)[int(data_maping['key_key'] - 1)]+"\", "
+                        insert_query += "\""+worksheet.row_values(row_index)[int(column_header)]+"\");"
+                        try :
+                            print "trying query -> "+insert_query
+                            cursor.execute(insert_query)
+                        except Exception as e:
+                                print e
+                    pass
+                pass
+            pass
+        pass
+    pass
+    
+    # Write the actual data
+    db_connection.commit()
+    db_connection.close()        
+        
+def do_import_foriegn_key_data  () :
     # connect to the database using values in the config file
     db_connection = MySQLdb.connect(config_file.DATABASE_CONNECTION['HOST'],config_file.DATABASE_CONNECTION['USER'], config_file.DATABASE_CONNECTION['PASSWORD'], config_file.DATABASE_CONNECTION['SCHEMA'])
     
@@ -44,6 +84,7 @@ def do_import_foriegn_key_data() :
                 cursor.execute(update_query)
             except Exception as e:
                 print e
+        pass
             
     pass    # Python or no Python a good programmer closes their loops
             
@@ -75,7 +116,7 @@ def do_import_primay_key_data() :
                 query_header = "INSERT INTO "+database_table_name
                 query_column = " ("
                 query_value = ") VALUES ("
-                query_footer = ")"
+                query_footer = ");"
                 
                 # Create each side of the map                                   
                 for map_name, map_index in data_maping.items() :
@@ -102,7 +143,7 @@ def do_import_primay_key_data() :
        
     
 def main() :
-    #TODO commandline allow import/export
+    #TODO command line allow import/export
     do_import()
         
    
