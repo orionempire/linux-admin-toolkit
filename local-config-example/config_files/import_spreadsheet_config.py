@@ -86,6 +86,20 @@ SECONDARY_KEY_MAP = {
             'script_profile' : 15                
         }           
     },
+    'physical_additional_ip' : {
+        'admin_gui_physical_machine_additional_ip' : {
+            'physical_machine_list_id' : 1,
+            'additional_ip' : 2
+        }
+    },
+    'physical_wire_run' : {
+        'admin_gui_physical_machine_wire_run' : {
+            'physical_machine_list_id' : 1,
+            'source_port' : 2,
+            'destination_machine_name' : 3,
+            'destination_port' :  4
+        }
+    },
     'virtual' : {        
         'admin_gui_virtual_machine_detail' : {
             'virtual_machine_list_id' : 1,
@@ -100,5 +114,38 @@ SECONDARY_KEY_MAP = {
             'admin_cluster_group_02' : 11,
             'script_profile' : 12                         
         }           
+    },
+    'storage_additional_ip' : {
+        'admin_gui_storage_machine_additional_ip' : {
+            'storage_machine_list_id' : 1,
+            'additional_ip' : 2
+        }
+    },
+    'storage_wire_run' : {
+        'admin_gui_storage_machine_wire_run' : {
+            'storage_machine_list_id' : 1,
+            'source_port' : 2,
+            'destination_machine_name' : 3,
+            'destination_port' :  4
+        }
+    }
+}
+
+RELATIONSHIP_MAP = {
+    'physical' : {
+        'admin_gui_physical_machine_list' : {            
+            'value_label' : 'host_enclosure_name_id',
+            'value_column' : 6,
+            'key_label' : 'physical_server_name',
+            'key_column' : 1
+        }
+    },
+    'virtual' : {
+        'admin_gui_virtual_machine_list' : {            
+            'value_label' : 'host_server_name_id',
+            'value_column' : 6,
+            'key_label' : 'virtual_server_name',
+            'key_column' : 1
+        }
     }
 }
