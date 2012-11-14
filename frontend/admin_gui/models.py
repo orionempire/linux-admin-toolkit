@@ -1,84 +1,113 @@
 from django.db import models
 # Python code representation of what the database will look like
 
+###### Blade Enclosures ######
+
 # Model representing a list of all blade enclosures that can/will contain blades
-class Physical_Enclosure_List(models.Model):    
-    enclosure_name = models.CharField(max_length=255,unique=True)
+class Enclosure_Machine_List(models.Model):    
+    enclosure_machine_name = models.CharField(primary_key=True, max_length=255, unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     location_code = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)
-    service_tag = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)     
+    point_of_contact = models.CharField(max_length=255)         
     def __unicode__(self):
-        return self.enclosure_name
+        return self.enclosure_machine_name
 
 # Model representing any additional IPs used by a blade enclosure.    
-class Physical_Enclosure_Additional_IP(models.Model):  
-    physical_enclosure_list = models.ForeignKey(Physical_Enclosure_List, to_field='enclosure_name')
-    additional_ip = models.CharField(max_length=255)     
+class Enclosure_Machine_Detail(models.Model):  
+    enclosure_machine_list =  models.OneToOneField(Enclosure_Machine_List, to_field='enclosure_machine_name')
+    service_tag = models.CharField(max_length=255)
+    model = models.CharField(max_length=255)    
+
+#Model representing any additional IPs used by a storage device.    
+class Enclosure_Machine_Additional_IP(models.Model):  
+    enclosure_machine_list = models.ForeignKey(Enclosure_Machine_List, to_field='enclosure_machine_name')
+    additional_ip = models.CharField(max_length=255)
+    
+# Model representing wire running from device to switch    
+class Enclosure_Machine_Wire_Run(models.Model):  
+    enclosure_machine_list = models.ForeignKey(Enclosure_Machine_List, to_field='enclosure_machine_name')
+    source_port = models.CharField(max_length=255)
+    destination_machine_name = models.CharField(max_length=255)
+    destination_port = models.CharField(max_length=255)     
+
+###### Physical Machines ######
 
 # Model representing all servers and blades, both might host Virtual machines and blades
 # might be in a enclosure in which case its location is its slot.
 class Physical_Machine_List(models.Model):    
-    physical_server_name = models.CharField(max_length=255,unique=True)
+    physical_server_name = models.CharField(primary_key=True, max_length=255, unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
     point_of_contact = models.CharField(max_length=255)       
-    host_enclosure_name = models.ForeignKey(Physical_Enclosure_List, null=True, blank=True, on_delete=models.SET_NULL)
-    
+    host_enclosure_name = models.ForeignKey(Enclosure_Machine_List, to_field='enclosure_machine_name', null=True, blank=True, on_delete=models.SET_NULL)    
     def __unicode__(self):
         return self.physical_server_name
        
-
-# A one to one extension of the physical machine list   
-#TODO import and ensure cascade delete     
+# A one to one extension of the physical machine list      
 class Physical_Machine_Detail(models.Model):
-    physical_machine_list = models.OneToOneField(Physical_Machine_List, to_field='physical_server_name')
-    #physical_machine_list = models.OneToOneField(Physical_Machine_List)
+    physical_machine_list = models.OneToOneField(Physical_Machine_List, to_field='physical_server_name')    
     location_code = models.CharField(max_length=255)
     service_tag = models.CharField(max_length=255)
     console_address = models.CharField(max_length=255)
     os = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
-    size = models.CharField(max_length=255)    
+    size = models.CharField(max_length=255)   
 
-# Model representing a list of tags that can be used for scripted admin actions
-class Physical_Machine_Cluster_Tag(models.Model):
-     physical_machine_list = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name')
-     admin_cluster_group = models.CharField(max_length=255)
-     
-# Model representing any additional IPs used by a physical server or blade.    
+class Physical_Machine_Services(models.Model):
+    physical_machine_list = models.OneToOneField(Physical_Machine_List, to_field='physical_server_name')
+    admin_cluster_group_01 = models.CharField(max_length=255)
+    admin_cluster_group_02 = models.CharField(max_length=255)
+    script_profile = models.CharField(max_length=255)
+    
+#Model representing any additional IPs used by a storage device.    
 class Physical_Machine_Additional_IP(models.Model):  
     physical_machine_list = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name')
-    additional_ip = models.CharField(max_length=255)       
+    additional_ip = models.CharField(max_length=255)
+    
+# Model representing wire running from device to switch    
+class Physical_Machine_Wire_Run(models.Model):  
+    physical_machine_list = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name')
+    source_port = models.CharField(max_length=255)
+    destination_machine_name = models.CharField(max_length=255)
+    destination_port = models.CharField(max_length=255)     
+
+###### Virtual Machines ######
  
 # Model representing a list of virtual machines. Must be hosted on a physical machine  
 class Virtual_Machine_List(models.Model):
-    virtual_server_name = models.CharField(max_length=255,unique=True)
+    virtual_server_name = models.CharField(primary_key=True, max_length=255, unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)   
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
     point_of_contact = models.CharField(max_length=255)
-    host_server_name = models.ForeignKey(Physical_Machine_List,null=True, blank=True, on_delete=models.SET_NULL)
-    size = models.CharField(max_length=255)
-    os = models.CharField(max_length=255)
-    base_image = models.CharField(max_length=255)
+    host_server_name = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name', null=True, blank=True, on_delete=models.SET_NULL)    
     def __unicode__(self):
         return self.virtual_server_name
 
-# Model representing a list of tags that can be used for scripted admin actions
-class Virtual_Machine_Cluster_Tag(models.Model):
-     virtual_machine_list = models.ForeignKey(Virtual_Machine_List, to_field='virtual_server_name')
-     admin_cluster_group = models.CharField(max_length=255)
-     
-# Model representing any additional IPs used by virtual machines.    
+# A one to one extension of the virtual machine list 
+class Virtual_Machine_Detail(models.Model):
+    virtual_machine_list = models.OneToOneField(Virtual_Machine_List, to_field='virtual_server_name')
+    size = models.CharField(max_length=255)
+    os = models.CharField(max_length=255)
+    base_image = models.CharField(max_length=255)    
+
+class Virtual_Machine_Services(models.Model):
+    virtual_machine_list = models.OneToOneField(Virtual_Machine_List, to_field='virtual_server_name')
+    admin_cluster_group_01 = models.CharField(max_length=255)
+    admin_cluster_group_02 = models.CharField(max_length=255)
+    script_profile = models.CharField(max_length=255)
+ 
+# Model representing any additional IPs used by a storage device.    
 class Virtual_Machine_Additional_IP(models.Model):  
     virtual_machine_list = models.ForeignKey(Virtual_Machine_List, to_field='virtual_server_name')
-    additional_ip = models.CharField(max_length=255) 
-    
-class Storage_Device_List(models.Model):
-    device_name = models.CharField(max_length=255,unique=True)
+    additional_ip = models.CharField(max_length=255)    
+   
+###### Storage ######
+
+ #Model representing a list of storage devices likes SANS,MDSs,etc
+class Storage_Machine_List(models.Model):
+    storage_machine_name = models.CharField(primary_key=True, max_length=255, unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     purpose = models.CharField(max_length=255)
     point_of_contact = models.CharField(max_length=255)
@@ -87,9 +116,16 @@ class Storage_Device_List(models.Model):
     model = models.CharField(max_length=255)
     #def console_address_link(self):
     def __unicode__(self):
-        return self.device_name
+        return self.storage_machine_name 
     
-# Model representing any additional IPs used by a blade enclosure.    
-class Storage_Device_Additional_IP(models.Model):  
-    storage_device_list = models.ForeignKey(Storage_Device_List, to_field='device_name')
-    additional_ip = models.CharField(max_length=255)      
+# Model representing any additional IPs used by a storage device.    
+class Storage_Machine_Additional_IP(models.Model):  
+    storage_machine_list = models.ForeignKey(Storage_Machine_List, to_field='storage_machine_name')
+    additional_ip = models.CharField(max_length=255)
+
+# Model representing wire running from device to switch    
+class Storage_Machine_Wire_Run(models.Model):  
+    storage_machine_list = models.ForeignKey(Storage_Machine_List, to_field='storage_machine_name')
+    source_port = models.CharField(max_length=255)
+    destination_machine_name = models.CharField(max_length=255)
+    destination_port = models.CharField(max_length=255)  
