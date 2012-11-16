@@ -115,6 +115,12 @@ SECONDARY_KEY_MAP = {
             'script_profile' : 12                         
         }           
     },
+    'virtual_additional_ip' : {
+        'admin_gui_virtual_machine_additional_ip' : {
+            'virtual_machine_list_id' : 1,
+            'additional_ip' : 2
+        }
+    },
     'storage_additional_ip' : {
         'admin_gui_storage_machine_additional_ip' : {
             'storage_machine_list_id' : 1,
