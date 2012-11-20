@@ -4,7 +4,7 @@ Created on Sept 19, 2012
 
 @author: David Davidson
 '''
-import imp, collections
+import imp
 #sudo pip install xlwt
 import xlwt             #@UnresolvedImport
 
@@ -16,18 +16,20 @@ config_file = imp.load_source('*', config_path+'config_files/export_spreadsheet_
 def do_export() :    
     do_flat_export(config_file.EXPORT_MAP) 
 
-def get_width(num_characters):
-    return int((1+num_characters) * 256)   
+def get_prefferd_column_width(num_characters):
+    if num_characters < 15 : 
+        return int(15 * 256)   
+    else:
+        return int((1+num_characters) * 256)
     
 def do_flat_export(config_object) :    
     # connect to the database using values in the config file
     db_connection = MySQLdb.connect(config_file.DATABASE_CONNECTION['HOST'],config_file.DATABASE_CONNECTION['USER'], config_file.DATABASE_CONNECTION['PASSWORD'], config_file.DATABASE_CONNECTION['SCHEMA'])
     #create the spreadsheet object
     book = xlwt.Workbook()
-
-    #my_list = collections.OrderedDict(sorted(config_object.items()))
-    #The sections must be cast to tuples     
-    for sheet_to_export, query_section in config_object.items():
+    
+    #The sections must be cast to tuples in export_spradsheet_config
+    for sheet_to_export, query_section in sorted(config_object.items()) :
         #Iterate the export map.
         #Field 
         query = "SELECT "
@@ -72,7 +74,7 @@ def do_flat_export(config_object) :
         #write the column titles on the first row
         i = 0
         for field in query_section['field'] :            
-            current_sheet.col(i).width = get_width(field.__len__())
+            current_sheet.col(i).width = get_prefferd_column_width(field.__len__())
             current_sheet.write(0, i, field,style)            
             i+=1
         pass
