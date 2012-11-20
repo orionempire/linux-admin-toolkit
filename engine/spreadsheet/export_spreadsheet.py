@@ -4,7 +4,7 @@ Created on Sept 19, 2012
 
 @author: David Davidson
 '''
-import imp
+import imp, collections
 #sudo pip install xlwt
 import xlwt             #@UnresolvedImport
 
@@ -15,40 +15,38 @@ config_file = imp.load_source('*', config_path+'config_files/export_spreadsheet_
 
 def do_export() :    
     do_flat_export(config_file.EXPORT_MAP) 
-   
+
+def get_width(num_characters):
+    return int((1+num_characters) * 256)   
     
 def do_flat_export(config_object) :    
     # connect to the database using values in the config file
     db_connection = MySQLdb.connect(config_file.DATABASE_CONNECTION['HOST'],config_file.DATABASE_CONNECTION['USER'], config_file.DATABASE_CONNECTION['PASSWORD'], config_file.DATABASE_CONNECTION['SCHEMA'])
-    # open the spread sheet
-    #spread_sheet = config_path+"data_files/"+config_file.EXPORT_SPREADSHEET_NAME
+    #create the spreadsheet object
     book = xlwt.Workbook()
-        
+
+    #my_list = collections.OrderedDict(sorted(config_object.items()))
     #The sections must be cast to tuples     
-    for sheet_to_export, query_section in config_object.items() :
+    for sheet_to_export, query_section in config_object.items():
+        #Iterate the export map.
+        #Field 
         query = "SELECT "
         for field in query_section['field']:            
             query += field+", "
-        query = query[:-2]
-        query += " FROM "
-        #for table in query_section['table'] :            
-        for table in query_section['table'] :           
-            query += table+", "
-            
+        #strip the last comma
         query = query[:-2]
         
+        #Table
+        query += " FROM "                    
+        for table in query_section['table'] :           
+            query += table+", "
+        #strip the last comma    
+        query = query[:-2]
+        
+        #If this refers a parent table build it.         
         if len(query_section['link']) > 0 :
             query += " WHERE "+query_section['link']
              
-         
-#        query += " WHERE "
-#        for link in query_section['link']:
-#            query += link+" = "
-#        
-#        if len(query_section['link']) == 0 : 
-#            query = query[:-6]
-#        else :
-#            query = query[:-3]
         
         cursor = db_connection.cursor ()
     
@@ -59,30 +57,36 @@ def do_flat_export(config_object) :
             print "ERROR ->",
             print e                    
         
-        #Create spreedsheet tab
+        #Build the spreadsheet
+        #Create spreadsheet tab
         current_sheet = book.add_sheet(sheet_to_export)
         
         font = xlwt.Font()
-        font.bold = True
-        font.underline = True
-        style = xlwt.XFStyle()
+        font.bold = True            
+        #style = xlwt.XFStyle()
+        style = xlwt.easyxf('pattern: pattern solid, fore-colour grey25')
         style.font = font
+        style.borders.bottom = 1
         
         
         #write the column titles on the first row
         i = 0
-        for field in query_section['field'] :
+        for field in query_section['field'] :            
+            current_sheet.col(i).width = get_width(field.__len__())
             current_sheet.write(0, i, field,style)            
             i+=1
+        pass
         
-        #write the data
+        #write the data on the additional rows 
         i = 1         
         for row in cursor.fetchall() :
             j = 0
             for column in row :
                 current_sheet.write(i, j, column) 
                 j+=1
+            pass
             i+=1
+        pass
     pass
     
     book.save(config_path+"data_files/"+config_file.EXPORT_SPREADSHEET_NAME)
