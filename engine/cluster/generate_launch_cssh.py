@@ -7,112 +7,89 @@ Created on Jun 14, 2012
 Assumption : 
 '''
 #modules part of default python library
-import os,sys
+import imp,os,sys
 #modules installed by os (yum or apt-get)
 import MySQLdb          #@UnresolvedImport
-# Modules installed with EasyInstall 
-from configobj import ConfigObj #@UnresolvedImport
 
-#config_path = os.path.abspath(__file__+"/../../../local-config/")
-config_path = "/etc/linux-admin-toolkit/config_files/"
+config_path = "/etc/linux-admin-toolkit/"
+#config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
+config_file = imp.load_source('*', config_path+'frontend/local_settings.py')
 
-# load configuration data
-dbconfig = ConfigObj(config_path+"database_config.dat")
-
-# build the file /etc/clusters based on the database
-def build_cluster() :
-    
+def do_generate() :
+    credentials = config_file.DATABASES['default']
     # connect to the database using values in the config file
-    database_connection = MySQLdb.connect(dbconfig['database_host'],dbconfig['database_user'], dbconfig['database_pass'],dbconfig['database_schema'])
+    #db_connection = MySQLdb.connect(config_file.DATABASES['default']['HOST'],config_file.DATABASES['default']['USER'], config_file.DATABASES['default']['PASSWORD'], config_file.DATABASES['default']['NAME'])
+    db_connection = MySQLdb.connect(credentials['HOST'],credentials['USER'], credentials['PASSWORD'],credentials['NAME'])
     
     print("Accessing database....")
     
-    with database_connection:
+    with db_connection:
         
-        cursor = database_connection.cursor()
+        cursor = db_connection.cursor()
 
-        # get a list of all of the unique values in admin_cluster_grouping_1
-        cursor.execute("select DISTINCT admin_cluster_grouping_1 from \
-        virtual_machine_list union select DISTINCT admin_cluster_grouping_1 from physical_machine_list;")
-        admin_cluster_grouping_1_rows = cursor.fetchall()        
+        # Cache a list of physical and virtual servers from the database
+        cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02\
+                        FROM `linux-admin-toolkit`.admin_gui_physical_machine_list \
+                        JOIN `linux-admin-toolkit`.admin_gui_physical_machine_services \
+                        ON physical_machine_list_id=physical_server_name")
+        physical_machine_list = cursor.fetchall()  
+        cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02\
+                        FROM `linux-admin-toolkit`.admin_gui_virtual_machine_list \
+                        JOIN `linux-admin-toolkit`.admin_gui_virtual_machine_services \
+                        ON virtual_machine_list_id=virtual_server_name")
+        virtual_machine_list = cursor.fetchall()
         
-        # get a list of all of the unique values in admin_cluster_grouping_2
-        cursor.execute("select DISTINCT admin_cluster_grouping_2 from virtual_machine_list \
-         union select DISTINCT admin_cluster_grouping_2 from physical_machine_list;")
-        admin_cluster_grouping_2_rows = cursor.fetchall()        
+        cluster_map = dict()
+        cluster_map['all_servers'] = []
+        cluster_map['physical_servers'] = []
+        cluster_map['virtual_servers'] = []
         
-        # create a list of all servers in the database as a cache        
-        cursor.execute("select primary_ip, admin_cluster_grouping_1, admin_cluster_grouping_2 \
-        from virtual_machine_list union select primary_ip, admin_cluster_grouping_1, admin_cluster_grouping_2 from physical_machine_list;")
-        master_server_list_rows = cursor.fetchall()
         
-        # create a list of all physical servers in the database as a cache        
-        cursor.execute("select primary_ip, admin_cluster_grouping_1, admin_cluster_grouping_2 from physical_machine_list;")
-        physical_server_list_rows = cursor.fetchall()
+        # Build a list of of all of the used admin groups        
+        for item in physical_machine_list :            
+            cluster_map["admin_group_"+item[1]] = []
+            cluster_map["admin_group_"+item[2]] = []            
+        pass        
+            
+        for item in virtual_machine_list :            
+            cluster_map["admin_group_"+item[1]] = []
+            cluster_map["admin_group_"+item[2]] = []            
+        pass
+    
+        #
+        for entity in physical_machine_list :
+            cluster_map['all_servers'].append(entity[0])
+            cluster_map['physical_servers'].append(entity[0])
+            cluster_map["admin_group_"+entity[1]].append(entity[0])
+            cluster_map["admin_group_"+entity[2]].append(entity[0])
+        for entity in virtual_machine_list :
+            cluster_map['all_servers'].append(entity[0])
+            cluster_map['virtual_servers'].append(entity[0])
+            cluster_map["admin_group_"+entity[1]].append(entity[0])
+            cluster_map["admin_group_"+entity[2]].append(entity[0])
         
-        # create a list of all virtual servers in the database as a cache        
-        cursor.execute("select primary_ip, admin_cluster_grouping_1, admin_cluster_grouping_2 from virtual_machine_list;")
-        virtual_server_list_rows = cursor.fetchall()
+        
+#        print cluster_map.items()
         
         print("Building Cluster file....")                
         try:
-            file_handle = open("/etc/clusters","w")
-            # add a entry to  the cluster files containing every server
-            current_cluster_group = "all_servers "
-            for counter in range(len(master_server_list_rows)) :
-                current_cluster_group += "%1s " % master_server_list_rows[counter][0]
-            pass        
-            file_handle.write(current_cluster_group + "\n\n")
-            
-            # add a entry to  the cluster files containing every physical server
-            current_cluster_group = "physical_servers "
-            for counter in range(len(physical_server_list_rows)) :
-                current_cluster_group += "%1s " % physical_server_list_rows[counter][0]
-            pass        
-            file_handle.write(current_cluster_group + "\n\n")
-            
-            # add a entry to  the cluster files containing every virtual server
-            current_cluster_group = "virtual_servers "
-            for counter in range(len(virtual_server_list_rows)) :
-                current_cluster_group += "%1s " % virtual_server_list_rows[counter][0]
-            pass        
-            file_handle.write(current_cluster_group + "\n\n")
-                      
-            # Write a entry for every distinct entry in admin_group_1 from physical and virtual combined
-            for tag_group_1 in admin_cluster_grouping_1_rows :
-                tag_group_1_str = "%1s" % tag_group_1
-                current_cluster_group = "group_1_"+tag_group_1_str+" "
-                # Add every ip address from the master server list
-                for server in range(len(master_server_list_rows)) :                    
-                    if tag_group_1_str in master_server_list_rows[server][1] :  
-                        current_cluster_group += "%1s " % master_server_list_rows[server][0]
-                    pass
-                pass
-                file_handle.write(current_cluster_group + "\n\n")
-            pass
-        
-        # Write a entry for every distinct entry in admin_group_2 from physical and virtual combined
-            for tag_group_2 in admin_cluster_grouping_2_rows :
-                tag_group_2_str = "%1s" % tag_group_2
-                current_cluster_group = "group_2_"+tag_group_2_str+" "
-                 # Add every ip address from the master server list
-                for server in range(len(master_server_list_rows)) :                    
-                    if tag_group_2_str in master_server_list_rows[server][2] :  
-                        current_cluster_group += "%1s " % master_server_list_rows[server][0]
-                    pass
-                pass
-                file_handle.write(current_cluster_group + "\n\n")
-            pass
-        
+            # generate the cluster file
+            file_handle = open("/etc/clusters","w")            
+            for key, value in sorted(cluster_map.items()) :
+                file_handle.write(key+" ")
+                for entry in value :
+                    file_handle.write(entry+" ")
+                file_handle.write("\n\n")
+                
         finally:
-            file_handle.close()
+            file_handle.close()            
         pass
+        
     pass
     
-    database_connection.close()
-    
-# use /etc/clusters to generate a menu and launch cssh
-def show_menu() :
+    db_connection.close()
+## use /etc/clusters to generate a menu and launch cssh
+def do_show_menu() :
     
     # Build a list of menu items
     menu_list = []
@@ -150,7 +127,7 @@ def show_menu() :
                     cmd += "%1s " % j[0]
                 pass
             pass
-            os.system(cmd)
+            os.system(cmd)            
         # show what would be launched
         elif choice == "s" or choice == "S":
             cmd = "cssh "
@@ -171,11 +148,15 @@ def show_menu() :
                 pass
             except Exception as e:
                 # Catches any entry that doesn't do something
+                print e
                 print "Invalid entry please choose again. Press q to exit."
             pass                                    
         pass
-               
-                
+
+def main() :
+    do_generate()
+    do_show_menu()
+    
+    
 if __name__ == '__main__':
-    build_cluster()
-    show_menu()
+    main()

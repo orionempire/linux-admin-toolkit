@@ -11,7 +11,7 @@ import xlwt             #@UnresolvedImport
 import MySQLdb          #@UnresolvedImport
 
 config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
-config_file = imp.load_source('*', config_path+'config_files/export_spreadsheet_config.py')
+config_file = imp.load_source('*', config_path+'engine/export_spreadsheet_config.py')
 
 def do_export() :    
     do_flat_export(config_file.EXPORT_MAP) 

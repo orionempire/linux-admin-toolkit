@@ -13,7 +13,7 @@ import MySQLdb          #@UnresolvedImport
 
 #config_path = "/etc/linux-admin-toolkit/"
 config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
-config_file = imp.load_source('*', config_path+'config_files/import_spreadsheet_config.py')
+config_file = imp.load_source('*', config_path+'engine/import_spreadsheet_config.py')
 
 def do_import() :    
     do_import_key_data(config_file.PRIMARY_KEY_MAP)    
@@ -32,8 +32,7 @@ def do_import_relationship_map(config_object) :
     
     # iterate through every relevant spreadsheet sheet then iterate through every database table that is loaded from that sheet       
     for sheet_to_load, database_table in config_object.items() :
-        print "Loading worksheet "+sheet_to_load+" from spreadsheet "+config_file.IMPORT_SPREADSHEET_NAME+"."
-        #print config_file.IMPORT_MAP[str(sheet_to_load)]
+        print "Loading worksheet "+sheet_to_load+" from spreadsheet "+config_file.IMPORT_SPREADSHEET_NAME+"."        
         worksheet = book.sheet_by_name(sheet_to_load)
                 
         for database_table_name, data_mapping in database_table.items() :
@@ -43,8 +42,6 @@ def do_import_relationship_map(config_object) :
             for row_index in xrange(1,worksheet.nrows):
                 cursor = db_connection.cursor ()
                 
-                #print data_mapping.items()
-                #print worksheet.row_values(row_index)[data_mapping['key_column']]
                 update_query = "UPDATE "+database_table_name+ " SET "+data_mapping['value_label']+"=\"" 
                 update_query += worksheet.row_values(row_index)[int(data_mapping['value_column'] - 1)]+"\" WHERE "+data_mapping['key_label']+"=\""
                 update_query += worksheet.row_values(row_index)[int(data_mapping['key_column'] -1)]+"\"" 

@@ -156,7 +156,7 @@ LOGGING = {
 #load local settings
 import sys
 try:
-   local_settings_path = '/etc/linux-admin-toolkit/config_files/frontend/'
+   local_settings_path = '/etc/linux-admin-toolkit/frontend/'
    if local_settings_path not in sys.path:
        sys.path.append(local_settings_path)
    from local_settings import *
