@@ -3,11 +3,8 @@
 import os
 
 #implies a saved ssh key
+#Sync build script with base image
+os.system("rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/")
 
-# deploy our application
-os.system("rsync -avz --delete /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/")
-
-# over write the dummy values
-os.system ("rsync -avz --delete /etc/linux-admin-toolkit/ root@192.168.30.144:/etc/linux-admin-toolkit/")
 
 
