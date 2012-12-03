@@ -20,9 +20,10 @@ def main():
     set_runlevel()
     set_time()
     print "Build complete. Now ...."
-    print "1 - Register with rhn (rhn_register)"
-    print "2 - Update the machine (yum update)"
-    print "3 - Set the system profile (TBD)"
+    print "1 - Reboot machine (shutdown -r now)"
+    print "2 - Register with rhn (rhn_register)"    
+    print "3 - Set the system profile (./configure_base_machine)"
+    print "4 - Update the machine (yum update)"
 pass
     
 def config_network():

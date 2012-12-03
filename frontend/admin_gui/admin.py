@@ -21,7 +21,7 @@ class Enclosure_Machine_List_Admin(admin.ModelAdmin):
     search_fields = ['enclosure_machine_name','point_of_contact']
     inlines = [Enclosure_Machine_Detail_Admin, Enclosure_Machine_Additional_IP_Admin, Enclosure_Machine_Wire_Run_Admin]    
     
-admin.site.register(Enclosure_Machine_List,Enclosure_Machine_List_Admin)
+admin.site.register(Enclosure_Machine_List, Enclosure_Machine_List_Admin)
 
 # Admin view of all physical servers and blades.
 class Physical_Machine_Detail_Admin(admin.TabularInline):
@@ -89,4 +89,4 @@ class Storage_Machine_List_Admin(admin.ModelAdmin):
     search_fields = ['storage_machine_name','point_of_contact']
     inlines = [Storage_Machine_Additional_IP_Admin, Storage_Machine_Wire_Run_Admin]
     
-admin.site.register(Storage_Machine_List,Storage_Machine_List_Admin)
+admin.site.register(Storage_Machine_List, Storage_Machine_List_Admin)
