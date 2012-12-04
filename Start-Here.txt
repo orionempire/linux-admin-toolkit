@@ -1,4 +1,4 @@
-# Welcome to the linux admin toolkit 00.00.02
+# Welcome to the linux admin toolkit 00.00.03
 
 
 #Sync build script with base image, implies a saved ssh key

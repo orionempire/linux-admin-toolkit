@@ -63,11 +63,11 @@ user_admin_site = UserAdmin(name='inventory_view')
 
 # View list of all physical servers and blades.    
 class Physical_Machine_List_Admin(admin.ModelAdmin):
-    list_display = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name']
-    list_filter=['host_enclosure_name','role','purpose']    
+    list_display = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name','status']
+    list_filter=['host_enclosure_name','role','purpose','status']    
     ordering = ['primary_ip_address']
     search_fields = ['host_enclosure_name','point_of_contact']        
-    readonly_fields = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name']
+    readonly_fields = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name','status']
     def has_add_permission(self, request):
         # Nobody is allowed to add
         return False
@@ -79,11 +79,11 @@ user_admin_site.register(Physical_Machine_List, Physical_Machine_List_Admin )
 
 # View list of all physical servers and blades.           
 class Virtual_Machine_List_Admin(admin.ModelAdmin):
-    list_display = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name']
-    list_filter=['host_server_name','role','purpose']    
+    list_display = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name','status']
+    list_filter=['host_server_name','role','purpose','status']    
     ordering = ['primary_ip_address']
     search_fields = ['host_server_name','point_of_contact']
-    readonly_fields = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name']
+    readonly_fields = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name','status']
     def has_add_permission(self, request):
         # Nobody is allowed to add
         return False

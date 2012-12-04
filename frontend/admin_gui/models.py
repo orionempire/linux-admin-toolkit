@@ -1,6 +1,13 @@
 from django.db import models
 # Python code representation of what the database will look like
 
+STATUS_CHOICES = (
+    ('active','Active'),
+    ('deploy','Deploying'),
+    ('maintenance','Maintenance'),
+    ('suspended','Suspended'),
+    ('planning','Planning'),
+)
 ###### Blade Enclosures ######
 
 # Model representing a list of all blade enclosures that can/will contain blades
@@ -8,7 +15,8 @@ class Enclosure_Machine_List(models.Model):
     enclosure_machine_name = models.CharField(primary_key=True, max_length=255, unique=True)
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     location_code = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)         
+    point_of_contact = models.CharField(max_length=255)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES)              
     def __unicode__(self):
         return self.enclosure_machine_name
 
@@ -39,8 +47,10 @@ class Physical_Machine_List(models.Model):
     primary_ip_address = models.CharField(max_length=255,unique=True)    
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)       
-    host_enclosure_name = models.ForeignKey(Enclosure_Machine_List, to_field='enclosure_machine_name', null=True, blank=True, on_delete=models.SET_NULL)    
+    point_of_contact = models.CharField(max_length=255)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES)       
+    host_enclosure_name = models.ForeignKey(Enclosure_Machine_List, to_field='enclosure_machine_name', null=True, blank=True, on_delete=models.SET_NULL)
+    selected = models.BooleanField() 
     def __unicode__(self):
         return self.physical_server_name
        
@@ -81,7 +91,9 @@ class Virtual_Machine_List(models.Model):
     role = models.CharField(max_length=255)
     purpose = models.CharField(max_length=255)
     point_of_contact = models.CharField(max_length=255)
-    host_server_name = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name', null=True, blank=True, on_delete=models.SET_NULL)    
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES)
+    host_server_name = models.ForeignKey(Physical_Machine_List, to_field='physical_server_name', null=True, blank=True, on_delete=models.SET_NULL)
+    selected = models.BooleanField()      
     def __unicode__(self):
         return self.virtual_server_name
 
@@ -114,7 +126,7 @@ class Storage_Machine_List(models.Model):
     location_code = models.CharField(max_length=255)
     service_tag = models.CharField(max_length=255)
     model = models.CharField(max_length=255)
-    #def console_address_link(self):
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES)   
     def __unicode__(self):
         return self.storage_machine_name 
     
@@ -129,3 +141,21 @@ class Storage_Machine_Wire_Run(models.Model):
     source_port = models.CharField(max_length=255)
     destination_machine_name = models.CharField(max_length=255)
     destination_port = models.CharField(max_length=255)  
+
+
+####################Setter Fuctions
+def make_selected(modeladmin, request, queryset):
+    queryset.update(selected=True)
+    
+
+def make_unselected(modeladmin, request, queryset):
+    queryset.update(selected=False)
+    
+def make_active(modeladmin, request, queryset):
+    queryset.update(status='active')
+
+def make_inactive(modeladmin, request, queryset):
+    queryset.update(status='suspended')
+    
+def make_maintenance(modeladmin, request, queryset):
+    queryset.update(status='maintenance')

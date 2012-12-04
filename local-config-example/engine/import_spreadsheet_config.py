@@ -13,7 +13,8 @@ PRIMARY_KEY_MAP = {
             'enclosure_machine_name' : 1,
             'primary_ip_address' : 2,
             'location_code' : 3,
-            'point_of_contact' : 4            
+            'point_of_contact' : 4,
+            'status' : 7,
         },
     },
     'physical' : {
@@ -22,7 +23,8 @@ PRIMARY_KEY_MAP = {
             'primary_ip_address' : 2,
             'role' : 3,
             'purpose' : 4,
-            'point_of_contact' : 5,            
+            'point_of_contact' : 5,
+            'status' : 7,            
         }        
     },
     'virtual' : {
@@ -31,7 +33,8 @@ PRIMARY_KEY_MAP = {
             'primary_ip_address' : 2,
             'role' : 3,
             'purpose' : 4,
-            'point_of_contact' : 5                        
+            'point_of_contact' : 5,
+            'status' : 7,                        
         }
     },
     'storage' : {
@@ -42,7 +45,8 @@ PRIMARY_KEY_MAP = {
             'point_of_contact' : 4,
             'location_code' : 5,
             'service_tag' : 6,
-            'model' : 7,             
+            'model' : 7,
+            'status' : 8,             
         }
     }    
 }
@@ -72,18 +76,18 @@ SECONDARY_KEY_MAP = {
     'physical' : {        
         'admin_gui_physical_machine_detail' : {
             'physical_machine_list_id' : 1,
-            'location_code' : 7,
-            'service_tag' : 8,
-            'console_address' : 9,
-            'os' : 10,
-            'model' : 11,
-            'size' : 12                        
+            'location_code' : 8,
+            'service_tag' : 9,
+            'console_address' : 10,
+            'os' : 11,
+            'model' : 12,
+            'size' : 13                        
         },
         'admin_gui_physical_machine_services' : {
             'physical_machine_list_id' : 1,
-            'admin_cluster_group_01' : 13,
-            'admin_cluster_group_02' : 14,
-            'script_profile' : 15                
+            'admin_cluster_group_01' : 14,
+            'admin_cluster_group_02' : 15,
+            'script_profile' : 16,                
         }           
     },
     'physical_additional_ip' : {
@@ -103,16 +107,16 @@ SECONDARY_KEY_MAP = {
     'virtual' : {        
         'admin_gui_virtual_machine_detail' : {
             'virtual_machine_list_id' : 1,
-            'size' : 7,             
-            'os' : 8,
-            'base_image' : 9 
+            'size' : 8,             
+            'os' : 9,
+            'base_image' : 10, 
                                    
         },
         'admin_gui_virtual_machine_services' : {
             'virtual_machine_list_id' : 1,
-            'admin_cluster_group_01' : 10,
-            'admin_cluster_group_02' : 11,
-            'script_profile' : 12                         
+            'admin_cluster_group_01' : 11,
+            'admin_cluster_group_02' : 12,
+            'script_profile' : 13,                         
         }           
     },
     'virtual_additional_ip' : {

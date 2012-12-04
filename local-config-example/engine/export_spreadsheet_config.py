@@ -10,7 +10,7 @@ EXPORT_SPREADSHEET_NAME = 'server_inventory_export.xls'
 #Must be Null or Tuples! add comma to the end of single item tuples
 EXPORT_MAP = {
      'enclosure' : {
-        'field' : ('enclosure_machine_name', 'primary_ip_address', 'location_code', 'point_of_contact', 'service_tag', 'model'),
+        'field' : ('enclosure_machine_name', 'primary_ip_address', 'location_code', 'point_of_contact', 'service_tag', 'model', 'status'),
         'table' : ('admin_gui_enclosure_machine_list ','admin_gui_enclosure_machine_detail'),
         'link'  : ('admin_gui_enclosure_machine_list.enclosure_machine_name=admin_gui_enclosure_machine_detail.enclosure_machine_list_id')
     },
@@ -25,7 +25,7 @@ EXPORT_MAP = {
         'link'  : ()
     },                       
     'physical' : {
-        'field' : ('physical_server_name', 'primary_ip_address', 'role', 'purpose', 'point_of_contact', 'host_enclosure_name_id', 'location_code', 'service_tag', 'console_address', 'os', 'model', 'size', 'admin_cluster_group_01', 'admin_cluster_group_02', 'script_profile'),
+        'field' : ('physical_server_name', 'primary_ip_address', 'role', 'purpose', 'point_of_contact', 'host_enclosure_name_id', 'location_code', 'service_tag', 'status', 'console_address', 'os', 'model', 'size', 'admin_cluster_group_01', 'admin_cluster_group_02', 'script_profile'),
         'table' : ('admin_gui_physical_machine_list', 'admin_gui_physical_machine_detail', 'admin_gui_physical_machine_services'),        
         'link'  : 'admin_gui_physical_machine_list.physical_server_name=admin_gui_physical_machine_detail.physical_machine_list_id and admin_gui_physical_machine_list.physical_server_name=admin_gui_physical_machine_services.physical_machine_list_id'
     },                       
@@ -40,7 +40,7 @@ EXPORT_MAP = {
         'link'  : ()
     },             
     'virtual' : {
-        'field' : ('virtual_server_name', 'primary_ip_address', 'role', 'purpose', 'point_of_contact', 'host_server_name_id', 'size', 'os', 'base_image', 'admin_cluster_group_01', 'admin_cluster_group_02', 'script_profile'),
+        'field' : ('virtual_server_name', 'primary_ip_address', 'role', 'purpose', 'point_of_contact', 'host_server_name_id', 'status', 'size', 'os', 'base_image', 'admin_cluster_group_01', 'admin_cluster_group_02', 'script_profile'),
         'table' : ('admin_gui_virtual_machine_list','admin_gui_virtual_machine_detail', 'admin_gui_virtual_machine_services'),
         'link'  : ('admin_gui_virtual_machine_list.virtual_server_name=admin_gui_virtual_machine_detail.virtual_machine_list_id and admin_gui_virtual_machine_list.virtual_server_name=admin_gui_virtual_machine_services.virtual_machine_list_id')
     },
@@ -50,7 +50,7 @@ EXPORT_MAP = {
         'link'  : ()
     }, 
     'storage' : {
-        'field' : ('storage_machine_name', 'primary_ip_address', 'purpose', 'point_of_contact', 'location_code', 'service_tag', 'model'),
+        'field' : ('storage_machine_name', 'primary_ip_address', 'purpose', 'point_of_contact', 'location_code', 'service_tag', 'model', 'status'),
         'table' : ('admin_gui_storage_machine_list',),
         'link'  : ()
     }, 
