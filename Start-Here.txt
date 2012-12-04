@@ -1,7 +1,12 @@
 # Welcome to the linux admin toolkit 00.00.02
 
-# Create and populate database
-DROP SCHEMA `linux-admin-toolkit`;CREATE SCHEMA `linux-admin-toolkit` ;
+
+#Sync build script with base image, implies a saved ssh key
+"rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/"
+
+old
+------------------------
+# Development creation steps
 
 # Create and populate local settings
 sudo mkdir -p /etc/linux-admin-toolkit/config_files/frontend/
@@ -10,28 +15,6 @@ sudo chmod -R a+r /etc/linux-admin-toolkit/
 
 # Populate database
 cd (proper_path)linux-admin-toolkit/frontend; python manage.py syncdb
-
-
-
-
-
---------------------
-clear table data
-----------------------
-DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_additional_ip;
-DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_cluster_tag;
-DELETE FROM `linux-admin-toolkit`.admin_gui_virtual_machine_list;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_additional_ip;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_cluster_tag;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_details;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_machine_list;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_additional_ip;
-DELETE FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_list ;
-
-------------------------
-old
-------------------------
-# Development creation steps
 # Ubuntu
 apt-get install python-setuptools python-dev build-essential
 apt-get install python-mysqldb
@@ -40,20 +23,3 @@ apt-get install mysql-client-core-5.5
 # to deploy
 scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/
 rsync -avz /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/
-
-
-#Notes
-#update query examples
-update
-    `linux-admin-toolkit`.admin_gui_physical_machine_list
-SET host_enclosure_name_id = (SELECT 
-    id
-FROM 
-    `linux-admin-toolkit`.admin_gui_physical_enclosure_list 
-WHERE 
-    enclosure_name = "nwr-pre-adm-mng02")
-where server_name = "seq-prd-adm-vir01";
-
-update `linux-admin-toolkit`.admin_gui_physical_machine_list SET host_enclosure_name_id = (SELECT id
-FROM `linux-admin-toolkit`.admin_gui_physical_enclosure_list WHERE enclosure_name = "nwr-pre-adm-mng02")
-where server_name = "seq-prd-adm-vir01";

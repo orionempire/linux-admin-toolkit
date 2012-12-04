@@ -68,6 +68,13 @@ class Physical_Machine_List_Admin(admin.ModelAdmin):
     ordering = ['primary_ip_address']
     search_fields = ['host_enclosure_name','point_of_contact']        
     readonly_fields = ['physical_server_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name']
+    def has_add_permission(self, request):
+        # Nobody is allowed to add
+        return False
+    def has_delete_permission(self, request, obj=None):
+        # Nobody is allowed to delete
+        return False
+    
 user_admin_site.register(Physical_Machine_List, Physical_Machine_List_Admin )
 
 # View list of all physical servers and blades.           
@@ -77,5 +84,11 @@ class Virtual_Machine_List_Admin(admin.ModelAdmin):
     ordering = ['primary_ip_address']
     search_fields = ['host_server_name','point_of_contact']
     readonly_fields = ['virtual_server_name','primary_ip_address','point_of_contact','role','purpose','host_server_name']
+    def has_add_permission(self, request):
+        # Nobody is allowed to add
+        return False
+    def has_delete_permission(self, request, obj=None):
+        # Nobody is allowed to delete
+        return False
 user_admin_site.register(Virtual_Machine_List, Virtual_Machine_List_Admin)
    

@@ -102,10 +102,18 @@ ROOT_URLCONF = 'frontend.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'frontend.wsgi.application'
 
+# Of course the Ubermenchen who designed DJANGO decided that templates must be absolute even thought 
+# they could have easily done so. So we hack....
+#By definition the base of the project is 2 levels under this file.
+import os
+PROJECT_BASE_PATH = os.path.abspath(os.path.split(os.path.split(__file__)[0])[0])
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    #os.path.abspath(os.path.dirname(__file__))+"/../admin_gui/template"
+    PROJECT_BASE_PATH+"/admin_gui/template"    
 )
 
 INSTALLED_APPS = (
