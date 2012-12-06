@@ -12,7 +12,6 @@ import imp,os,sys
 import MySQLdb          #@UnresolvedImport
 
 config_path = "/etc/linux-admin-toolkit/"
-#config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
 config_file = imp.load_source('*', config_path+'frontend/local_settings.py')
 
 def do_generate() :

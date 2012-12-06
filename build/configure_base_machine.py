@@ -78,10 +78,10 @@ def config_vmware():
     #select install guest additions.
     os.system("mkdir /mnt/cdrom")
     os.system("mount /dev/cdrom /mnt/cdrom")
-    os.system("cd /tmp")
+    os.system("cd /etc/vmware-install")
     os.system("rm -fr /tmp/VMwareTools*")
-    os.system("cp /mnt/cdrom/VMwareTools-*.tar.gz /tmp")
-    os.system("tar -zxvf /tmp/VMwareTools-*.tar.gz")
+    os.system("cp /mnt/cdrom/VMwareTools-*.tar.gz /etc/vmware-install/")
+    os.system("tar -zxvf /etc/vmware-install/VMwareTools-*.tar.gz -C /etc/vmware-install/")
     os.system("umount /dev/cdrom")
     print "Now run the configuration wizard"
 pass

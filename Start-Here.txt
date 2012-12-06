@@ -1,25 +1,92 @@
 # Welcome to the linux admin toolkit 00.00.03
 
+----------------------------Installation Instructions----------------------------------------
+#Starting with the developer workstation build
+
+#install mysql
+yum install mysql-server
+service mysqld start;chkconfig mysqld on
+
+yum install MySQL-python
+
+yum install mod_wsgi
+
+#Install pip
+curl http://python-distribute.org/distribute_setup.py | python
+#Install Django
+pip install Django
+pip install xlwt
+pip install xlrd
+
+mkdir /opt/linux-admin-toolkit
+mkdir /etc/linux-admin-toolkit/
+
+#wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
+wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_13-47_12-05-2012.tgz
+#tar xvfz linux-admin-toolkit_13-47_12-05-2012.tgz
+tar xvfz linux-admin-toolkit_(Build Date).tgz
+
+cp -R * /opt/linux-admin-toolkit/
+cp -R /opt/linux-admin-toolkit/local-config-example/* /etc/linux-admin-toolkit/
+
+#edit /etc/linux-admin-toolkit/frontend/local_settings.py
+
+mysql -u root  -e 'CREATE SCHEMA `linux-admin-toolkit`'
+python manage.py syncdb --noinput
+python manage.py createsuperuser --username sysadmin --email sysadmin@linux-admin-toolkit.com
+
+# Change your secret key in /opt/linux-admin-toolkit/frontend/frontend/settings.py
+# python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])'
+
+#add to  /etc/httpd/conf/httpd.conf
+<VirtualHost *:80>
+
+    ServerName wsgi.djangoserver
+    DocumentRoot /opt/linux-admin-toolkit/frontend
+
+    <Directory /opt/linux-admin-toolkit/frontend>
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    WSGIScriptAlias / /opt/linux-admin-toolkit/frontend/frontend/wsgi.py
+
+    Alias /static/admin/ /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/
+
+    <Directory /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin>
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+</VirtualHost>
+
+#turn on apache
+service httpd start
+chkconfig httpd on
+
+
+-------------------cluster ssh---------------------
+wget ftp://rpmfind.net/linux/epel/6/x86_64/perl-Tk-804.028-12.el6.x86_64.rpm
+rpm -Uvh perl-Tk-804.028-12.el6.x86_64.rpm
+wget ftp://rpmfind.net/linux/epel/6/x86_64/perl-X11-Protocol-0.56-4.el6.noarch.rpm
+rpm -Uvh perl-X11-Protocol-0.56-4.el6.noarch.rpm
+
+yum install xterm 
+
+wget ftp://rpmfind.net/linux/epel/6/x86_64/clusterssh-3.28-2.el6.noarch.rpm
+rpm -Uvh clusterssh-3.28-2.el6.noarch.rpm
+
 
 #Sync build script with base image, implies a saved ssh key
-"rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/"
+rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/
 
-old
-------------------------
-# Development creation steps
+----------------------------Development Notes----------------------------------------
+#Can develop against repository with
+#config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
 
-# Create and populate local settings
-sudo mkdir -p /etc/linux-admin-toolkit/config_files/frontend/
-sudo mkdir -p /etc/linux-admin-toolkit/config_files/engine/
-sudo chmod -R a+r /etc/linux-admin-toolkit/
 
-# Populate database
-cd (proper_path)linux-admin-toolkit/frontend; python manage.py syncdb
-# Ubuntu
-apt-get install python-setuptools python-dev build-essential
-apt-get install python-mysqldb
-apt-get install mysql-client-core-5.5
 
-# to deploy
-scp -r linux-admin-toolkit root@192.168.XXX.XXX:/u01/admin/linux-admin-toolkit/
-rsync -avz /home/sysadmin/git/linux-admin-toolkit root@192.168.30.144:/u01/admin/
+------------------------------To Do ---------------------------------
+Notes field
+allow blanks
+IP address allocation and hostname report

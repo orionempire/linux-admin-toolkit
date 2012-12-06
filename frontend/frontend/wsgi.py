@@ -13,7 +13,12 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
+import os, sys
+
+path = '/opt/linux-admin-toolkit/frontend'
+if path not in sys.path:
+    sys.path.insert(0, path)
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "frontend.settings")
 
