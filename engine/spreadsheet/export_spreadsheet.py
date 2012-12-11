@@ -4,13 +4,14 @@ Created on Sept 19, 2012
 
 @author: David Davidson
 '''
-import imp
+import imp,glob, os, datetime, fileinput, sys
 #sudo pip install xlwt
 import xlwt             #@UnresolvedImport
 
 import MySQLdb          #@UnresolvedImport
 
-config_path = "/etc/linux-admin-toolkit/"
+#config_path = "/etc/linux-admin-toolkit/"
+config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
 config_file = imp.load_source('*', config_path+'engine/export_spreadsheet_config.py')
 
 def do_export() :    
@@ -23,6 +24,9 @@ def get_prefferd_column_width(num_characters):
         return int((1+num_characters) * 256)
     
 def do_flat_export(config_object) :    
+    
+    archive_globed_files(config_path+"data_files/"+config_file.EXPORT_SPREADSHEET_NAME,"n")
+    
     # connect to the database using values in the config file
     db_connection = MySQLdb.connect(config_file.DATABASE_CONNECTION['HOST'],config_file.DATABASE_CONNECTION['USER'], config_file.DATABASE_CONNECTION['PASSWORD'], config_file.DATABASE_CONNECTION['SCHEMA'])
     #create the spreadsheet object
@@ -92,6 +96,26 @@ def do_flat_export(config_object) :
     pass
     
     book.save(config_path+"data_files/"+config_file.EXPORT_SPREADSHEET_NAME)
+
+def archive_globed_files(glb, preserve):
+    now = datetime.datetime.now()
+    #create the archive destination if it does not yet exist.
+    try:    
+        os.makedirs("/etc/linux-admin-toolkit/archive/")
+    #ignore exception thrown if directory exists
+    except :        
+        pass
+        
+    filelist=glob.glob(glb)
+    for file_name in filelist:
+        new_location = "/etc/linux-admin-toolkit/archive/"+now.strftime("%Y-%m-%d-%I%M%S%p")+"_"+os.path.basename(file_name)        
+        if preserve == "n":
+            print "archiving -> ", file_name," to ->", new_location 
+            os.system("mv "+file_name+" "+new_location)
+        else:
+            print "backing up -> ", file," to ->", new_location 
+            os.system("cp "+file_name+" "+new_location)
+
 
 if __name__ == '__main__':
     do_export()

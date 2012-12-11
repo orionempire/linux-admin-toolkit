@@ -1,11 +1,12 @@
 # Welcome to the linux admin toolkit 00.00.03
 
-----------------------------Installation Instructions----------------------------------------
+----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
 
 #install mysql
 yum install mysql-server
-service mysqld start;chkconfig mysqld on
+service mysqld start
+chkconfig mysqld on
 
 yum install MySQL-python
 
@@ -13,17 +14,17 @@ yum install mod_wsgi
 
 #Install pip
 curl http://python-distribute.org/distribute_setup.py | python
-#Install Django
+
+#Install Django and modules
 pip install Django
 pip install xlwt
 pip install xlrd
+pip install python-nmap
 
 mkdir /opt/linux-admin-toolkit
 mkdir /etc/linux-admin-toolkit/
 
-#wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
-wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_13-47_12-05-2012.tgz
-#tar xvfz linux-admin-toolkit_13-47_12-05-2012.tgz
+wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
 tar xvfz linux-admin-toolkit_(Build Date).tgz
 
 cp -R * /opt/linux-admin-toolkit/
@@ -90,3 +91,13 @@ rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10.
 Notes field
 allow blanks
 IP address allocation and hostname report
+
+
+
+
+
+
+
+
+
+

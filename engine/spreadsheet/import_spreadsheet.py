@@ -10,8 +10,8 @@ import xlrd             #@UnresolvedImport
 
 import MySQLdb          #@UnresolvedImport
 
-
-config_path = "/etc/linux-admin-toolkit/"
+config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
+#config_path = "/etc/linux-admin-toolkit/"
 config_file = imp.load_source('*', config_path+'engine/import_spreadsheet_config.py')
 
 def do_import() :    
@@ -35,7 +35,7 @@ def do_import_relationship_map(config_object) :
         worksheet = book.sheet_by_name(sheet_to_load)
                 
         for database_table_name, data_mapping in database_table.items() :
-            print "Creating the relaionships in the "+database_table_name+" table of the "+config_file.DATABASE_CONNECTION['SCHEMA']+" database."
+            print "Creating the relationships in the "+database_table_name+" table of the "+config_file.DATABASE_CONNECTION['SCHEMA']+" database."
                        
             # the 1 skips the header row
             for row_index in xrange(1,worksheet.nrows):
