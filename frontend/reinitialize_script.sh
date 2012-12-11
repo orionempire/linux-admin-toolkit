@@ -3,7 +3,10 @@
 mysql -u root -e 'DROP SCHEMA `linux-admin-toolkit`'
 mysql -u root -e 'CREATE SCHEMA `linux-admin-toolkit`'
 
-cd /home/sysadmin/workspace/linux-admin-toolkit/frontend/
+#cd /home/sysadmin/workspace/linux-admin-toolkit/frontend/
+
+echo "set proper directory"
+exit
 
 python manage.py syncdb --noinput
 
@@ -33,4 +36,4 @@ user.user_permissions.add(permission)
 user.save()
 EOF
 
-echo "Intialized Django" 
+echo "Intialization completed. Now import data." 

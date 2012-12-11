@@ -10,8 +10,7 @@ import xlwt             #@UnresolvedImport
 
 import MySQLdb          #@UnresolvedImport
 
-#config_path = "/etc/linux-admin-toolkit/"
-config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
+config_path = "/etc/linux-admin-toolkit/"
 config_file = imp.load_source('*', config_path+'engine/export_spreadsheet_config.py')
 
 def do_export() :    

@@ -16,8 +16,7 @@ config_file = imp.load_source('*', config_path+'frontend/local_settings.py')
 
 def do_generate() :
     credentials = config_file.DATABASES['default']
-    # connect to the database using values in the config file
-    #db_connection = MySQLdb.connect(config_file.DATABASES['default']['HOST'],config_file.DATABASES['default']['USER'], config_file.DATABASES['default']['PASSWORD'], config_file.DATABASES['default']['NAME'])
+    # connect to the database using values in the config file    
     db_connection = MySQLdb.connect(credentials['HOST'],credentials['USER'], credentials['PASSWORD'],credentials['NAME'])
     
     print("Accessing database....")
