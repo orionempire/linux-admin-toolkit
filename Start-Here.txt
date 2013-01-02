@@ -19,7 +19,6 @@ curl http://python-distribute.org/distribute_setup.py | python
 pip install Django
 pip install xlwt
 pip install xlrd
-pip install python-nmap
 
 mkdir /opt/linux-admin-toolkit
 mkdir /etc/linux-admin-toolkit/
@@ -27,14 +26,12 @@ mkdir /etc/linux-admin-toolkit/
 wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
 tar xvfz linux-admin-toolkit_(Build Date).tgz
 
-cp -R * /opt/linux-admin-toolkit/
+cp -R linux-admin-toolkit /opt/linux-admin-toolkit/
 cp -R /opt/linux-admin-toolkit/local-config-example/* /etc/linux-admin-toolkit/
 
 #edit /etc/linux-admin-toolkit/frontend/local_settings.py
 
-mysql -u root  -e 'CREATE SCHEMA `linux-admin-toolkit`'
-python manage.py syncdb --noinput
-python manage.py createsuperuser --username sysadmin --email sysadmin@linux-admin-toolkit.com
+#edit and run /etc/linux-admin-toolkit/frontend/reinitialize_script.sh
 
 # Change your secret key in /opt/linux-admin-toolkit/frontend/frontend/settings.py
 # python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])'

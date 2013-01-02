@@ -36,4 +36,5 @@ user.user_permissions.add(permission)
 user.save()
 EOF
 
+#python manage.py changepassword sysadmin
 echo "Intialization completed. Now import data." 

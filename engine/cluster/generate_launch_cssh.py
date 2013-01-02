@@ -27,14 +27,14 @@ def do_generate() :
 
         # Cache a list of physical and virtual servers from the database
         cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected\
-                        FROM `linux-admin-toolkit`.admin_gui_physical_machine_list \
-                        JOIN `linux-admin-toolkit`.admin_gui_physical_machine_services \
-                        ON physical_machine_list_id=physical_server_name")
+                        FROM `linux-admin-toolkit`.admin_gui_physical \
+                        JOIN `linux-admin-toolkit`.admin_gui_physical_services \
+                        ON physical_id=physical_name")
         physical_machine_list = cursor.fetchall()  
         cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected\
-                        FROM `linux-admin-toolkit`.admin_gui_virtual_machine_list \
-                        JOIN `linux-admin-toolkit`.admin_gui_virtual_machine_services \
-                        ON virtual_machine_list_id=virtual_server_name")
+                        FROM `linux-admin-toolkit`.admin_gui_virtual \
+                        JOIN `linux-admin-toolkit`.admin_gui_virtual_services \
+                        ON virtual_id=virtual_name")
         virtual_machine_list = cursor.fetchall()
         
         cluster_map = dict()
