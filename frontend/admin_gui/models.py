@@ -12,149 +12,172 @@ STATUS_CHOICES = (
 
 # Model representing a list of all blade enclosures that can/will contain blades
 class Enclosure(models.Model):    
-    enclosure_name = models.CharField(primary_key=True, max_length=255, unique=True)
-    primary_ip_address = models.CharField(max_length=255,unique=True)
-    status = models.CharField(max_length=255,choices=STATUS_CHOICES)    
-    location_code = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)
-    note = models.TextField(max_length=1024)    
-    ip_active = models.BooleanField()    
-    def __unicode__(self):
+    enclosure_name = models.CharField(max_length=255, unique=True)    
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')    
+    location_code = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")
+    note = models.TextField(max_length=1024,default="none")    
+    ip_active = models.NullBooleanField() 
+    def __unicode__(self):        
         return self.enclosure_name
 
 # Model representing any additional IPs used by a blade enclosure.    
 class Enclosure_Detail(models.Model):  
-    enclosure =  models.OneToOneField(Enclosure, to_field='enclosure_name')
-    service_tag = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)    
+    enclosure =  models.OneToOneField(Enclosure)
+    service_tag = models.CharField(max_length=255,blank=True)
+    model = models.CharField(max_length=255,blank=True)    
+    def __unicode__(self):        
+       return unicode(self.enclosure)
 
 #Model representing any additional IPs used by a storage device.    
 class Enclosure_Additional_IP(models.Model):  
-    enclosure = models.ForeignKey(Enclosure, to_field='enclosure_name')
-    additional_ip = models.CharField(max_length=255)
-    ip_active = models.BooleanField()
+    enclosure = models.ForeignKey(Enclosure)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.NullBooleanField()
+    def __unicode__(self):        
+       return unicode(self.enclosure)
     
 # Model representing wire running from device to switch    
 class Enclosure_Wire_Run(models.Model):  
-    enclosure = models.ForeignKey(Enclosure, to_field='enclosure_name')
-    source_port = models.CharField(max_length=255)
-    destination_name = models.CharField(max_length=255)
-    destination_port = models.CharField(max_length=255)     
+    enclosure = models.ForeignKey(Enclosure)
+    source_port = models.CharField(max_length=255,blank=True)
+    destination_name = models.CharField(max_length=255,blank=True)
+    destination_port = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+       return unicode(self.enclosure)
 
 ###### Physical Machines ######
 
 # Model representing all servers and blades, both might host Virtual machines and blades
 # might be in a enclosure in which case its location is its slot.
 class Physical(models.Model):    
-    physical_name = models.CharField(primary_key=True, max_length=255, unique=True)
-    primary_ip_address = models.CharField(max_length=255,unique=True)    
-    role = models.CharField(max_length=255)
-    purpose = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)           
-    host_enclosure_name = models.ForeignKey(Enclosure, to_field='enclosure_name', null=True, blank=True, on_delete=models.SET_NULL)
-    status = models.CharField(max_length=255,choices=STATUS_CHOICES)
-    note = models.TextField(max_length=1024)
-    selected = models.BooleanField() 
-    ip_active = models.BooleanField()    
-    
-    def __unicode__(self):
-        return self.physical_name
+    physical_name = models.CharField(max_length=255, unique=True)
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)    
+    role = models.CharField(max_length=255,default="none")
+    purpose = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")           
+    host_enclosure_name = models.ForeignKey(Enclosure, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    note = models.TextField(max_length=1024,default="none")
+    selected = models.NullBooleanField() 
+    ip_active = models.NullBooleanField()            
+    def __unicode__(self):        
+       return self.physical_name
        
 # A one to one extension of the physical machine list      
 class Physical_Detail(models.Model):
-    physical = models.OneToOneField(Physical, to_field='physical_name')    
-    location_code = models.CharField(max_length=255)
-    service_tag = models.CharField(max_length=255)
-    console_address = models.CharField(max_length=255)
-    os = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)
-    size = models.CharField(max_length=255)
-    console_ip_active = models.BooleanField()   
+    physical = models.OneToOneField(Physical)    
+    location_code = models.CharField(max_length=255,blank=True)
+    service_tag = models.CharField(max_length=255,blank=True)
+    console_address = models.GenericIPAddressField(unique=True,blank=True,null=True)
+    os = models.CharField(max_length=255,blank=True)
+    model = models.CharField(max_length=255,blank=True)
+    size = models.CharField(max_length=255,blank=True)
+    console_ip_active = models.NullBooleanField()
+    def __unicode__(self):        
+       return unicode(self.physical)
 
 class Physical_Services(models.Model):
-    physical = models.OneToOneField(Physical, to_field='physical_name')
-    admin_cluster_group_01 = models.CharField(max_length=255)
-    admin_cluster_group_02 = models.CharField(max_length=255)
-    script_profile = models.CharField(max_length=255)
+    physical = models.OneToOneField(Physical)
+    admin_cluster_group_01 = models.CharField(max_length=255,blank=True)
+    admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
+    script_profile = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+       return unicode(self.physical)
     
 #Model representing any additional IPs used by a storage device.    
 class Physical_Additional_IP(models.Model):  
-    physical = models.ForeignKey(Physical, to_field='physical_name')
-    additional_ip = models.CharField(max_length=255)
-    ip_active = models.BooleanField()
+    physical = models.ForeignKey(Physical)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.NullBooleanField()
+    def __unicode__(self):        
+       return unicode(self.physical)
     
 # Model representing wire running from device to switch    
 class Physical_Wire_Run(models.Model):  
-    physical = models.ForeignKey(Physical, to_field='physical_name')
-    source_port = models.CharField(max_length=255)
-    destination_name = models.CharField(max_length=255)
-    destination_port = models.CharField(max_length=255)     
+    physical = models.ForeignKey(Physical)
+    source_port = models.CharField(max_length=255,blank=True)
+    destination_name = models.CharField(max_length=255,blank=True)
+    destination_port = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+       return unicode(self.physical)
 
 ###### Virtual Machines ######
  
 # Model representing a list of virtual machines. Must be hosted on a physical machine  
 class Virtual(models.Model):
-    virtual_name = models.CharField(primary_key=True, max_length=255, unique=True)
-    primary_ip_address = models.CharField(max_length=255,unique=True)   
-    role = models.CharField(max_length=255)
-    purpose = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)    
-    host_physical_name = models.ForeignKey(Physical, to_field='physical_name', null=True, blank=True, on_delete=models.SET_NULL)
-    status = models.CharField(max_length=255,choices=STATUS_CHOICES)
-    selected = models.BooleanField() 
-    ip_active = models.BooleanField()
-    note = models.TextField(max_length=1024)   
-    def __unicode__(self):
+    virtual_name = models.CharField( max_length=255, unique=True)
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)   
+    role = models.CharField(max_length=255,default="none")
+    purpose = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")    
+    host_physical_name = models.ForeignKey(Physical, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    selected = models.NullBooleanField() 
+    ip_active = models.NullBooleanField()
+    note = models.TextField(max_length=1024,default="none")       
+    def __unicode__(self):        
         return self.virtual_name
 
 # A one to one extension of the virtual machine list 
 class Virtual_Detail(models.Model):
-    virtual = models.OneToOneField(Virtual, to_field='virtual_name')
-    size = models.CharField(max_length=255)
-    os = models.CharField(max_length=255)
-    base_image = models.CharField(max_length=255)    
-
+    virtual = models.OneToOneField(Virtual)
+    size = models.CharField(max_length=255,blank=True)
+    os = models.CharField(max_length=255,blank=True)
+    base_image = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+        return self.virtual
+    
 class Virtual_Services(models.Model):
-    virtual = models.OneToOneField(Virtual, to_field='virtual_name')
-    admin_cluster_group_01 = models.CharField(max_length=255)
-    admin_cluster_group_02 = models.CharField(max_length=255)
-    script_profile = models.CharField(max_length=255)
- 
+    virtual = models.OneToOneField(Virtual)
+    admin_cluster_group_01 = models.CharField(max_length=255,blank=True)
+    admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
+    script_profile = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+        return self.virtual
+    
 # Model representing any additional IPs used by a storage device.    
 class Virtual_Additional_IP(models.Model):  
-    virtual = models.ForeignKey(Virtual, to_field='virtual_name')
-    additional_ip = models.CharField(max_length=255)
-    ip_active = models.BooleanField()  
-   
+    virtual = models.ForeignKey(Virtual)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.NullBooleanField()
+    def __unicode__(self):        
+        return self.virtual
+    
 ###### Storage ######
 
  #Model representing a list of storage devices likes SANS,MDSs,etc
 class Storage(models.Model):
-    storage_name = models.CharField(primary_key=True, max_length=255, unique=True)
-    primary_ip_address = models.CharField(max_length=255,unique=True)    
-    purpose = models.CharField(max_length=255)
-    point_of_contact = models.CharField(max_length=255)
-    location_code = models.CharField(max_length=255)
-    service_tag = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)
-    status = models.CharField(max_length=255,choices=STATUS_CHOICES)
-    ip_active = models.BooleanField()
-    note = models.TextField(max_length=1024)  
-    def __unicode__(self):
-        return self.storage_name 
+    storage_name = models.CharField(max_length=255, unique=True)
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)    
+    purpose = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")
+    location_code = models.CharField(max_length=255,default="none")
+    service_tag = models.CharField(max_length=255,default="none")
+    model = models.CharField(max_length=255,default="none")
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    ip_active = models.NullBooleanField()
+    note = models.TextField(max_length=1024,default="none")  
+    def __unicode__(self):        
+        return self.storage_name
     
 # Model representing any additional IPs used by a storage device.    
 class Storage_Additional_IP(models.Model):  
-    storage = models.ForeignKey(Storage, to_field='storage_name')
-    additional_ip = models.CharField(max_length=255)
-    ip_active = models.BooleanField()
+    storage = models.ForeignKey(Storage)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.NullBooleanField()
+    def __unicode__(self):        
+        return self.storage
 
 # Model representing wire running from device to switch    
 class Storage_Wire_Run(models.Model):  
-    storage = models.ForeignKey(Storage, to_field='storage_name')
-    source_port = models.CharField(max_length=255)
-    destination_name = models.CharField(max_length=255)
-    destination_port = models.CharField(max_length=255)  
+    storage = models.ForeignKey(Storage)
+    source_port = models.CharField(max_length=255,blank=True)
+    destination_name = models.CharField(max_length=255,blank=True)
+    destination_port = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+        return self.storage
 
 
 ####################Setter Fuctions

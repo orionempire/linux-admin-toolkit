@@ -19,12 +19,19 @@ MANAGERS = ADMINS
 #        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
 #    }
 #}
+import os
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(os.path.dirname(__file__), '../../data/database.db'),
+    }
+}
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -127,8 +134,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',    
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    'admin_gui',    
+    # 'django.contrib.admindocs',    
+    'admin_gui',   
 )
 
 # A sample logging configuration. The only tangible logging
@@ -160,12 +167,3 @@ LOGGING = {
     }
 }
 
-#load local settings
-import sys
-try:
-   local_settings_path = '/etc/linux-admin-toolkit/frontend/'
-   if local_settings_path not in sys.path:
-       sys.path.append(local_settings_path)
-   from local_settings import *
-except ImportError:
-   pass

@@ -19,14 +19,15 @@ class Enclosure_Detail_Admin(admin.TabularInline):
 class Enclosure_Admin(admin.ModelAdmin):
     list_display = ['enclosure_name','primary_ip_address','location_code','point_of_contact','status','ip_active']    
     list_editable = ['status']
-    list_filter=['location_code','status']
+    list_filter=['location_code','point_of_contact','status']
     ordering = ['primary_ip_address']
-    search_fields = ['enclosure_name','primary_ip_address','point_of_contact']
+    search_fields = ['enclosure_name','primary_ip_address','point_of_contact','location_code']
     readonly_fields = ['ip_active']
     inlines = [Enclosure_Detail_Admin, Enclosure_Additional_IP_Admin, Enclosure_Wire_Run_Admin]  
     actions = [make_active, make_inactive, make_maintenance]  
     
 admin.site.register(Enclosure, Enclosure_Admin)
+
 
 # Admin view of all physical servers and blades.
 class Physical_Detail_Admin(admin.TabularInline):
@@ -49,7 +50,7 @@ class Physical_Wire_Run_Admin(admin.TabularInline):
 class Physical_Admin(admin.ModelAdmin):
     list_display = ['physical_name','primary_ip_address','point_of_contact','role','purpose','host_enclosure_name','status','selected','ip_active']    
     list_editable = ['status','selected']
-    list_filter=['purpose','location_code','service_tag','model','status']
+    list_filter=['role','purpose','host_enclosure_name','status']
     ordering = ['primary_ip_address']
     search_fields = ['physical_name','primary_ip_address','point_of_contact']
     readonly_fields = ['ip_active']
@@ -106,3 +107,6 @@ class Storage_Admin(admin.ModelAdmin):
     actions = [make_active, make_inactive, make_maintenance]
     
 admin.site.register(Storage, Storage_Admin)
+
+
+

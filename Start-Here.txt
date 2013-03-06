@@ -15,10 +15,11 @@ yum install mod_wsgi
 #Install pip
 curl http://python-distribute.org/distribute_setup.py | python
 
-#Install Django and modules
+#AS ROOT -> Install Django and modules
 pip install Django
-pip install xlwt
-pip install xlrd
+->pip install django-import-export
+<-pip install xlwt
+<-pip install xlrd
 
 mkdir /opt/linux-admin-toolkit
 mkdir /etc/linux-admin-toolkit/
