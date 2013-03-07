@@ -1,7 +1,12 @@
 #! /usr/bin/python
+
+from config_file_edit_functions import *
+
 import os, sys
 
 rhn_username = "changeme"
+rhn_userpass = "changeme"
+reminders = []
 #############################################################################
 ###                                Show Menu                              ###
 #############################################################################
@@ -29,6 +34,9 @@ def main ():
         os.system("clear")
         # exit
         if choice == "q" or choice == "Q":
+            print "Don't for get to ....."
+        for item in reminders :
+            print item
                 sys.exit(0)
         # launch
         elif choice == "l" or choice == "L":
@@ -53,19 +61,55 @@ def main ():
         pass   
 pass
 
-config_profiles = ("base", "vmware")
+config_profiles = ("base", "vmware","redhat_network")
 
-def config_base():
-    print "RHN must be registered manually (rhn_register) press any key to proceed (q exits) -> "
-        
+def config_base() :
+    #increase root history retention
+    arch_globed_files("/root/.bashrc","y")
+    add_to_file("/root/.bashrc","HISTSIZE=10000")
+    
+    #Turn off security until post build
+    arch_globed_files("/etc/selinux/config","y")
+    add_unique_entry_to_file("/etc/selinux/config","SELINUX=","SELINUX=disabled")
+
+    #set run level to 3    
+    arch_globed_files("/etc/inittab","y")
+    replace_all_occurances_of_a_phrase("/etc/inittab","id:5:initdefault:","id:3:initdefault:")
+
+    # add the step tickers for jumps
+    arch_globed_files("/etc/ntp/step-tickers","y")
+    add_to_file("/etc/ntp/step-tickers", "server 0.rhel.pool.ntp.org")
+    add_to_file("/etc/ntp/step-tickers", "server 1.rhel.pool.ntp.org")
+    add_to_file("/etc/ntp/step-tickers", "server 2.rhel.pool.ntp.org")
+    
+    # Force the new time incase the jump is to big
+    os.system("service ntpd stop")
+    os.system("ntpdate 0.rhel.pool.ntp.org")
+    os.system("service ntpd start")
+
+
+pass
+
+
+def config_redhat_network():
+    print "RHN must be registered manually press any key to proceed (q exits) -> "
+            
     choice = raw_input()
 
     # exit
     if choice == "q" or choice == "Q":
-        sys.exit(0)
-    
-    print "Enter rhn password for user "+rhn_username+" -> "
-    rhn_userpass = raw_input()
+        return
+
+    os.system("rhn_register")        
+
+    print "If rhn_register failed press q to exit -> "
+
+    choice = raw_input()
+
+    # exit
+    if choice == "q" or choice == "Q":
+        return
+
     os.system("rhn-channel -a -u "+rhn_username+" -p "+rhn_userpass+" -c rhel-x86_64-server-supplementary-6")
     os.system("rhn-channel -a -u "+rhn_username+" -p "+rhn_userpass+" -c rhn-tools-rhel-x86_64-server-6")
     os.system("rhn-channel -a -u "+rhn_username+" -p "+rhn_userpass+" -c rhel-x86_64-server-optional-6")
@@ -74,16 +118,18 @@ pass
 
     
 def config_vmware():
-    print "Installing VMWare tools"
-    #select install guest additions.
-    os.system("mkdir /mnt/cdrom")
-    os.system("mount /dev/cdrom /mnt/cdrom")
-    os.system("cd /etc/vmware-install")
-    os.system("rm -fr /tmp/VMwareTools*")
-    os.system("cp /mnt/cdrom/VMwareTools-*.tar.gz /etc/vmware-install/")
+    print "Preping VMWare tools for install"
+    os.system("rm -fr /etc/vmware-install")
+    try:    
+        os.makedirs("/etc/vmware-install")
+    #ignore exception thrown if directory exists
+    except :        
+        pass
+    
+    os.system("cp /mnt/admin_build_directory/vmware/VMwareTools-*.tar.gz /etc/vmware-install")
     os.system("tar -zxvf /etc/vmware-install/VMwareTools-*.tar.gz -C /etc/vmware-install/")
-    os.system("umount /dev/cdrom")
-    print "Now run the configuration wizard"
+    print "For safety vmware tools install is kicked off manually (/etc/vmware-install/vmware-tools-distrib/vmware-install.pl)"
+    reminders.append("/etc/vmware-install/vmware-tools-distrib/vmware-install.pl")
 pass
 
 
@@ -95,3 +141,4 @@ if __name__ == '__main__':
    
     main()
 pass
+

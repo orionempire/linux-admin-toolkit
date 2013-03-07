@@ -1,4 +1,4 @@
-# Welcome to the linux admin toolkit 00.00.03
+# Welcome to the linux admin toolkit 00.00.04
 
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
@@ -11,35 +11,10 @@ pip install Django
 pip install xlwt
 pip install xlrd
 
-
-
------------------old-----------------------
-
-
-
-#install mysql
-yum install mysql-server
-service mysqld start
-chkconfig mysqld on
-
-yum install MySQL-python
-
-yum install mod_wsgi
-
-
-mkdir /etc/linux-admin-toolkit/
-
-mkdir /opt/linux-admin-toolkit
-
 wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
 tar xvfz linux-admin-toolkit_(Build Date).tgz
 
 cp -R linux-admin-toolkit /opt/linux-admin-toolkit/
-cp -R /opt/linux-admin-toolkit/local-config-example/* /etc/linux-admin-toolkit/
-
-#edit /etc/linux-admin-toolkit/frontend/local_settings.py
-
-#edit and run /etc/linux-admin-toolkit/frontend/reinitialize_script.sh
 
 # Change your secret key in /opt/linux-admin-toolkit/frontend/frontend/settings.py
 # python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])'
@@ -86,6 +61,4 @@ rpm -Uvh clusterssh-3.28-2.el6.noarch.rpm
 #Sync build script with base image, implies a saved ssh key
 rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/
 
-----------------------------Development Notes----------------------------------------
-#Can develop against repository with
-#config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
+

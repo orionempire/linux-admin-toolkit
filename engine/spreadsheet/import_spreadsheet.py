@@ -8,7 +8,8 @@ import imp, sqlite3, os, sys
 
 import xlrd             #@UnresolvedImport
 
-config_file = imp.load_source('*', '../../local-config-files/import_export_spreadsheet_config.py')
+config_file = imp.load_source('*', os.path.join(os.path.dirname(__file__), '../../local-config-files/import_export_spreadsheet_config.py'))
+
 
 def import_model(model_to_import,sheet_to_import):
     db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))   

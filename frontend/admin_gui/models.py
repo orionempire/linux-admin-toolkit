@@ -202,7 +202,6 @@ class Ancillary_Additional_IP(models.Model):
     def __unicode__(self):        
         return self.ancillary
 
-
 ####################Setter Functions
 def make_selected(modeladmin, request, queryset):
     queryset.update(selected=True)   

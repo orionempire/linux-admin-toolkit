@@ -60,9 +60,3 @@ def replace_all_occurances_of_a_phrase(file,search_exp,replace_exp):
         line = line.replace(search_exp,replace_exp)        
         sys.stdout.write(line)    # using write instead of print, squelches carriage returns
 
-#deploy specified config file from the proper profile to specified location
-#first make sure if there is a file there it gets archived
-def deploy_config_file(profile, file_name, new_location, repository_path):
-    arch_globed_files(new_location+"/"+file_name, "y")
-    os.system("curl -o "+new_location+"/"+file_name+" "+repository_path+profile+"/"+file_name)
-    

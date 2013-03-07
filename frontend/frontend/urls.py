@@ -5,9 +5,9 @@ from admin_gui.inventory_view import user_admin_site
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',    
+urlpatterns = patterns('',        
     url(r'^admin/', include(admin.site.urls)),        
-    url(r'^ping/', include('admin_gui.urls')),
+    url(r'^action/', include('admin_gui.urls')),
     url(r'^view/', include(user_admin_site.urls)),    
     url(r'^',include(user_admin_site.urls))
 )

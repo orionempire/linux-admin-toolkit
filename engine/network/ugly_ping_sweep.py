@@ -7,6 +7,8 @@ Created on 12/112012
 Assumption : 
 '''
 #TODO  ugly need to fix later
+
+# kill ->  kill $(ps aux | grep ugly_ping_sweep.py | grep python | awk '{ print $2 }')
 #modules part of default python library
 import imp, os, sqlite3
 
@@ -20,10 +22,11 @@ def main() :
         
         print "Scanning table -> "+table
         cursor.execute("select "+columns[1]+" from "+table)
-        working_list = cursor.fetchall()                
+        working_list = cursor.fetchall()        
         
         for item in working_list :
-            if os.system("ping -c 1 -W 1 "+item[0]+">> /dev/null") :
+            print "Executing -> ping -c 1 -W 1 "+item[0]+">> /dev/null"
+            if os.system("ping -c 1 -W 1 "+item[0]+">> /dev/null") :                
                 print item[0]+" is DEAD Executing ->"+"UPDATE "+table+" SET "+columns[2]+"=0 "+"WHERE "+columns[1]+"=\""+item[0]+"\""                
                 cursor.execute("UPDATE "+table+" SET "+columns[2]+"=0 "+"WHERE "+columns[1]+"=\""+item[0]+"\"")                                
             else :

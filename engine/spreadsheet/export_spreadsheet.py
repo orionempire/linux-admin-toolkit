@@ -8,7 +8,7 @@ import imp, sqlite3, os, glob, datetime,sys
 
 import xlwt             #@UnresolvedImport
 
-config_file = imp.load_source('*', '../../local-config-files/import_export_spreadsheet_config.py')
+config_file = imp.load_source('*', os.path.join(os.path.dirname(__file__), '../../local-config-files/import_export_spreadsheet_config.py'))
 
 def export_model(book, sheet_to_export, models_to_use):
     db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))          
