@@ -1,23 +1,16 @@
 #! /usr/bin/python
 '''
-Created on Jun 14, 2012
+Created on Mar 7, 2013
 
 @author: David Davidson
 
 Assumption : 
 '''
-#modules part of default python library
-import imp,os,sys
-#modules installed by os (yum or apt-get)
-import MySQLdb          #@UnresolvedImport
 
-config_path = "/etc/linux-admin-toolkit/"
-config_file = imp.load_source('*', config_path+'frontend/local_settings.py')
+import sqlite3, os, sys
 
 def do_generate() :
-    credentials = config_file.DATABASES['default']
-    # connect to the database using values in the config file    
-    db_connection = MySQLdb.connect(credentials['HOST'],credentials['USER'], credentials['PASSWORD'],credentials['NAME'])
+    db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))
     
     print("Accessing database....")
     
@@ -26,22 +19,21 @@ def do_generate() :
         cursor = db_connection.cursor()
 
         # Cache a list of physical and virtual servers from the database
-        cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected\
-                        FROM `linux-admin-toolkit`.admin_gui_physical \
-                        JOIN `linux-admin-toolkit`.admin_gui_physical_services \
-                        ON physical_id=physical_name")
+        virtual_query = "SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected "
+        virtual_query += "FROM admin_gui_virtual JOIN admin_gui_virtual_services ON virtual_id=admin_gui_virtual.id"
+        #print "Executing -> "+virtual_query
+        cursor.execute(virtual_query)
         physical_machine_list = cursor.fetchall()  
-        cursor.execute("SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected\
-                        FROM `linux-admin-toolkit`.admin_gui_virtual \
-                        JOIN `linux-admin-toolkit`.admin_gui_virtual_services \
-                        ON virtual_id=virtual_name")
+        physical_query = "SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected "
+        physical_query += "FROM admin_gui_physical JOIN admin_gui_physical_services ON physical_id=admin_gui_physical.id"        
+        #print "Executing -> "+physical_query
+        cursor.execute(physical_query)
         virtual_machine_list = cursor.fetchall()
         
         cluster_map = dict()
         cluster_map['all_servers'] = []
         cluster_map['physical_servers'] = []
         cluster_map['virtual_servers'] = []
-        cluster_map['selected'] = []
         
         # Build a list of of all of the used admin groups        
         for item in physical_machine_list : 
@@ -60,21 +52,17 @@ def do_generate() :
             cluster_map['physical_servers'].append(entity[0])
             cluster_map["admin_group_"+entity[1]].append(entity[0])
             cluster_map["admin_group_"+entity[2]].append(entity[0])
-            
-            if(entity[3]) :
-                cluster_map['selected'].append(entity[0])
+                        
                     
         for entity in virtual_machine_list :
             cluster_map['all_servers'].append(entity[0])
             cluster_map['virtual_servers'].append(entity[0])
             cluster_map["admin_group_"+entity[1]].append(entity[0])
             cluster_map["admin_group_"+entity[2]].append(entity[0])
-            
-            if(entity[3]) :
-                cluster_map['selected'].append(entity[0])
+                        
         
         
-#        print cluster_map.items()
+        print cluster_map.items()
         
         print("Building Cluster file....")                
         try:
@@ -93,6 +81,7 @@ def do_generate() :
     pass
     
     db_connection.close()
+
 ## use /etc/clusters to generate a menu and launch cssh
 def do_show_menu() :
     
@@ -156,8 +145,7 @@ def do_show_menu() :
                 print e
                 print "Invalid entry please choose again. Press q to exit."
             pass                                    
-        pass
-
+        pass   
 def main() :
     do_generate()
     do_show_menu()
