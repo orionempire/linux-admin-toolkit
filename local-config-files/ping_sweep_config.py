@@ -1,10 +1,3 @@
-DATABASE_CONNECTION = {
-                      'HOST' : 'localhost',
-                      'USER' : 'root',
-                      'PASSWORD' : '',
-                      'SCHEMA' : 'linux-admin-toolkit'
-}
-
 PING_SWEEP_TABLES = {
     'admin_gui_enclosure' : ['enclosure_name','primary_ip_address','ip_active'],
     'admin_gui_enclosure_additional_ip' : ['enclosure_id', 'additional_ip', 'ip_active'],
@@ -14,6 +7,5 @@ PING_SWEEP_TABLES = {
     'admin_gui_storage' : ['storage_name','primary_ip_address','ip_active'],
     'admin_gui_storage_additional_ip' : ['storage_id', 'additional_ip', 'ip_active'],
     'admin_gui_virtual' : ['virtual_name','primary_ip_address','ip_active'],
-    'admin_gui_virtual_additional_ip' : ['virtual_id', 'additional_ip', 'ip_active'],
-        
+    'admin_gui_virtual_additional_ip' : ['virtual_id', 'additional_ip', 'ip_active'],        
 }

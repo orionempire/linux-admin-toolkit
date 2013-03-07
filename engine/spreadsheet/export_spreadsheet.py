@@ -6,71 +6,111 @@ Created on Sept 19, 2012
 '''
 import imp, sqlite3, os, glob, datetime
 
-import xlrd             #@UnresolvedImport
+import xlwt             #@UnresolvedImport
 
-config_file = imp.load_source('*', '../../local-config-files/import_spreadsheet_config.py')
+config_file = imp.load_source('*', '../../local-config-files/import_export_spreadsheet_config.py')
 
-def export_model(sheet_to_export, models_to_use):
-    db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))  
+def export_model(book, sheet_to_export, models_to_use):
+    db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))          
     
-    #book = xlrd.open_workbook(config_file.IMPORT_SPREADSHEET_NAME)
-    #worksheet = book.sheet_by_name(sheet_to_export)
+    current_sheet = book.add_sheet(sheet_to_export)
     
     cursor = db_connection.cursor ()
-    tmp1 = [0]*100
-    tmp4 = []
-    tmp5 = []
+    # Pre initialize the list so that values can be added to proper index
+    spreadsheet_columns = [0]*1000
+    used_model_list = []
+    used_conditions = []
     
-    for tmp2 in models_to_use :
-        for tmp3 in config_file.MODEL_TO_SPREADSHEET_MAP[tmp2] :
-            if tmp3[0] == "self" :                
-                tmp1[tmp3[2]] = tmp3[1]
-            else :
-                if( tmp3[2] == 1) :
-                    tmp5.append(config_file.PROJECT_TABLE_PREFIX+tmp2+"."+tmp3[1]+" = "+config_file.PROJECT_TABLE_PREFIX+tmp3[0][0]+".id")
-                else :
-                    #tmp1[tmp3[2]] = "(SELECT "+enclosure_name+" FROM "+admin_gui_enclosure+" WHERE id="+host_enclosure_name_id+") AS TEST"
-                    tmp1[tmp3[2]] = "(SELECT "+tmp3[0][1]+" FROM "+config_file.PROJECT_TABLE_PREFIX+tmp3[0][0]+" WHERE id="+tmp3[1]+") AS "+tmp3[1]
-        tmp4.append(tmp2)
-    
-    tmp1 = filter (lambda a: a != 0, tmp1)    
+    for model in models_to_use :
+        used_model_list.append(model)
+           
+    for model in models_to_use :
+        for map_item in config_file.MODEL_TO_SPREADSHEET_MAP[model] :
+            if map_item[0] == "self" :                            
+                spreadsheet_columns[map_item[2]] = map_item[1]
+            else :                
+                if( map_item[0][0] in used_model_list) :                    
+                    used_conditions.append(config_file.PROJECT_TABLE_PREFIX+model+"."+map_item[1]+" = "+config_file.PROJECT_TABLE_PREFIX+map_item[0][0]+".id")
+                else :                                        
+                    spreadsheet_columns[map_item[2]] = "(SELECT "+map_item[0][1]+" FROM "+config_file.PROJECT_TABLE_PREFIX+map_item[0][0]+" WHERE id="+map_item[1]+") AS "+map_item[1]
+        
+    #compact the list of headers to the used map items
+    spreadsheet_columns = filter (lambda a: a != 0, spreadsheet_columns)    
     
     query = "SELECT "
-    for field in tmp1 :     
+    for field in spreadsheet_columns :     
         query += field+", "
     #strip the last comma
     query = query[:-2]
     
     #Table
     query += " FROM "                    
-    for table in tmp4 :           
+    for table in used_model_list :           
         query += config_file.PROJECT_TABLE_PREFIX+table+", "
     #strip the last comma    
     query = query[:-2]
     
-    #Where
-    query += " WHERE "                    
-    for table in tmp5 :           
-        query += table+" AND "
-    #strip the last AND    
-    query = query[:-5]
+    #Build the Where side if there is one
+    if len(used_conditions) > 0 :
+        query += " WHERE "        
+        for table in used_conditions :           
+            query += table+" AND "
+        #strip the last AND    
+        query = query[:-5]
     
     try :
         pass                        
         print "trying query -> "+query
-        #cursor.execute(query)        
+        cursor.execute(query)        
     except Exception as e:
         print "ERROR ->",
         print e       
     
-    #tmp6 = cursor.fetchall()
-    #print tmp6  
+    
+    font = xlwt.Font()
+    font.bold = True            
+    #style = xlwt.XFStyle()
+    style = xlwt.easyxf('pattern: pattern solid, fore-colour grey25')
+    style.font = font
+    style.borders.bottom = 1
+            
+    i = 0
+    for header in cursor.description :
+        current_sheet.col(i).width = get_prefferd_column_width(header[0].__len__())
+        current_sheet.write(0, i, header[0],style)
+        i += 1
+        
+    
+    #write the data on the additional rows 
+    i = 1         
+    for row in cursor.fetchall() :
+        j = 0
+        for column in row :
+            current_sheet.write(i, j, column) 
+            j+=1
+        pass
+        i+=1
+    pass
+    
    
-    #db_connection.close() 
+    db_connection.close() 
+    
 def main():
-    #archive_globed_files(config_file.IMPORT_SPREADSHEET_NAME,"n")
-    export_model("enclosure",["enclosure","enclosure_detail"])
-    export_model("physical",["physical","physical_detail","physical_services"])
+    archive_globed_files(config_file.SPREADSHEET_TO_USE_NAME,"n")
+    #create the spreadsheet object
+    book = xlwt.Workbook()    
+    export_model(book, "enclosure",["enclosure","enclosure_detail"])
+    export_model(book, "enclosure_additional_ip",["enclosure_additional_ip"])
+    export_model(book, "enclosure_wire_run",["enclosure_wire_run"])
+    export_model(book, "physical",["physical","physical_detail","physical_services"])
+    export_model(book, "physical_additional_ip",["physical_additional_ip"])
+    export_model(book, "physical_wire_run",["physical_wire_run"])
+    export_model(book, "storage",["storage"])
+    export_model(book, "storage_additional_ip",["storage_additional_ip"])
+    export_model(book, "storage_wire_run",["storage_wire_run"])
+    export_model(book, "virtual",["virtual","virtual_detail","virtual_services"])
+    export_model(book, "virtual_additional_ip",["virtual_additional_ip"])
+    book.save(config_file.SPREADSHEET_TO_USE_NAME)
     
 def archive_globed_files(glb, preserve):
     now = datetime.datetime.now()
@@ -90,6 +130,11 @@ def archive_globed_files(glb, preserve):
         else:
             print "backing up -> ", file," to ->", new_location 
             os.system("cp "+file_name+" "+new_location)
+def get_prefferd_column_width(num_characters):
+    if num_characters < 15 : 
+        return int(15 * 256)   
+    else:
+        return int((1+num_characters) * 256)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-IMPORT_SPREADSHEET_NAME = '/var/linux-admin-toolkit/server_inventory_import_export.xls'
+SPREADSHEET_TO_USE_NAME = '/var/linux-admin-toolkit/server_inventory_import_export.xls'
 
 PROJECT_TABLE_PREFIX= 'admin_gui_'
 
@@ -73,9 +73,9 @@ MODEL_TO_SPREADSHEET_MAP = {
     ],
     'virtual_detail' : [
         [['virtual','virtual_name'],'virtual_id', 1],
-        ['self','size',2],
-        ['self','os',3],
-        ['self','base_image',4],           
+        ['self','size',8],
+        ['self','os',9],
+        ['self','base_image',10],           
     ],
     'virtual_services' : [
         [['virtual','virtual_name'],'virtual_id', 1],
