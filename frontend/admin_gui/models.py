@@ -18,7 +18,7 @@ class Enclosure(models.Model):
     location_code = models.CharField(max_length=255,default="none")
     point_of_contact = models.CharField(max_length=255,default="none")
     note = models.TextField(max_length=1024,default="none")    
-    ip_active = models.NullBooleanField(default=False) 
+    ip_active = models.BooleanField(default=False) 
     def __unicode__(self):        
         return self.enclosure_name
 
@@ -34,7 +34,7 @@ class Enclosure_Detail(models.Model):
 class Enclosure_Additional_IP(models.Model):  
     enclosure = models.ForeignKey(Enclosure)
     additional_ip = models.GenericIPAddressField(unique=True)
-    ip_active = models.NullBooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
        return unicode(self.enclosure)
     
@@ -60,8 +60,8 @@ class Physical(models.Model):
     host_enclosure_name = models.ForeignKey(Enclosure, null=True, blank=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
     note = models.TextField(max_length=1024,default="none")
-    selected = models.NullBooleanField(default=True) 
-    ip_active = models.NullBooleanField(default=False)            
+    selected = models.BooleanField(default=False) 
+    ip_active = models.BooleanField(default=False)            
     def __unicode__(self):        
        return self.physical_name
        
@@ -74,7 +74,7 @@ class Physical_Detail(models.Model):
     os = models.CharField(max_length=255,blank=True)
     model = models.CharField(max_length=255,blank=True)
     size = models.CharField(max_length=255,blank=True)
-    console_ip_active = models.NullBooleanField(default=False)
+    console_ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
        return unicode(self.physical)
 
@@ -90,7 +90,7 @@ class Physical_Services(models.Model):
 class Physical_Additional_IP(models.Model):  
     physical = models.ForeignKey(Physical)
     additional_ip = models.GenericIPAddressField(unique=True)
-    ip_active = models.NullBooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
        return unicode(self.physical)
     
@@ -114,8 +114,8 @@ class Virtual(models.Model):
     point_of_contact = models.CharField(max_length=255,default="none")    
     host_physical_name = models.ForeignKey(Physical, null=True, blank=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
-    selected = models.NullBooleanField(default=False)
-    ip_active = models.NullBooleanField(default=False)
+    selected = models.BooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")       
     def __unicode__(self):        
         return self.virtual_name
@@ -141,7 +141,7 @@ class Virtual_Services(models.Model):
 class Virtual_Additional_IP(models.Model):  
     virtual = models.ForeignKey(Virtual)
     additional_ip = models.GenericIPAddressField(unique=True)
-    ip_active = models.NullBooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
         return self.virtual
     
@@ -157,7 +157,7 @@ class Storage(models.Model):
     service_tag = models.CharField(max_length=255,default="none")
     model = models.CharField(max_length=255,default="none")
     status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
-    ip_active = models.NullBooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")  
     def __unicode__(self):        
         return self.storage_name
@@ -166,7 +166,7 @@ class Storage(models.Model):
 class Storage_Additional_IP(models.Model):  
     storage = models.ForeignKey(Storage)
     additional_ip = models.GenericIPAddressField(unique=True)
-    ip_active = models.NullBooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
         return self.storage
 
@@ -178,6 +178,29 @@ class Storage_Wire_Run(models.Model):
     destination_port = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
         return self.storage
+
+#Model representing Ancillary devices and virtual machines
+class Ancillary(models.Model):
+    ancillary_name =  models.CharField(max_length=255, unique=True)
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)    
+    purpose = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")
+    location_code = models.CharField(max_length=255,default="none")
+    service_tag = models.CharField(max_length=255,default="none")
+    model = models.CharField(max_length=255,default="none")
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    ip_active = models.BooleanField(default=False)
+    note = models.TextField(max_length=1024,default="none")  
+    def __unicode__(self):        
+        return self.ancillary_name
+
+# Model representing any additional IPs used by a Ancillary device.    
+class Ancillary_Additional_IP(models.Model):  
+    ancillary = models.ForeignKey(Ancillary)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.BooleanField(default=False)
+    def __unicode__(self):        
+        return self.ancillary
 
 
 ####################Setter Functions

@@ -4,7 +4,7 @@ Created on Sept 19, 2012
 
 @author: David Davidson
 '''
-import imp, sqlite3, os, glob, datetime
+import imp, sqlite3, os, glob, datetime,sys
 
 import xlwt             #@UnresolvedImport
 
@@ -21,18 +21,29 @@ def export_model(book, sheet_to_export, models_to_use):
     used_model_list = []
     used_conditions = []
     
+    #Any model used is a from condition
     for model in models_to_use :
         used_model_list.append(model)
            
     for model in models_to_use :
+        #Iterate the relationships specified in the config file
         for map_item in config_file.MODEL_TO_SPREADSHEET_MAP[model] :
+            # self indicates the value in the db table
             if map_item[0] == "self" :                            
                 spreadsheet_columns[map_item[2]] = map_item[1]
-            else :                
-                if( map_item[0][0] in used_model_list) :                    
-                    used_conditions.append(config_file.PROJECT_TABLE_PREFIX+model+"."+map_item[1]+" = "+config_file.PROJECT_TABLE_PREFIX+map_item[0][0]+".id")
+            # default indicates it is a unsaved value
+            elif (map_item[0] == "default") :
+                #no need to export default values
+                pass
+            # link indicates it is a value that must be looked up else where
+            elif (map_item[0] == "link") :             
+                if( map_item[1][0] in used_model_list) :                    
+                    used_conditions.append(config_file.PROJECT_TABLE_PREFIX+model+"."+map_item[1][2]+" = "+config_file.PROJECT_TABLE_PREFIX+map_item[1][0]+".id")
                 else :                                        
-                    spreadsheet_columns[map_item[2]] = "(SELECT "+map_item[0][1]+" FROM "+config_file.PROJECT_TABLE_PREFIX+map_item[0][0]+" WHERE id="+map_item[1]+") AS "+map_item[1]
+                    spreadsheet_columns[map_item[2]] = "(SELECT "+map_item[1][1]+" FROM "+config_file.PROJECT_TABLE_PREFIX+map_item[1][0]+" WHERE id="+map_item[1][2]+") AS "+map_item[1][2]
+            else :
+                print "ERROR -> Poorly formed map",
+                sys.exit()      
         
     #compact the list of headers to the used map items
     spreadsheet_columns = filter (lambda a: a != 0, spreadsheet_columns)    
@@ -110,6 +121,8 @@ def main():
     export_model(book, "storage_wire_run",["storage_wire_run"])
     export_model(book, "virtual",["virtual","virtual_detail","virtual_services"])
     export_model(book, "virtual_additional_ip",["virtual_additional_ip"])
+    export_model(book, "ancillary",["ancillary"])
+    export_model(book, "ancillary_additional_ip",["ancillary_additional_ip"])
     book.save(config_file.SPREADSHEET_TO_USE_NAME)
     
 def archive_globed_files(glb, preserve):

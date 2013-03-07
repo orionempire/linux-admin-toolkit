@@ -4,7 +4,7 @@ Created on Sept 19, 2012
 
 @author: David Davidson
 '''
-import imp, sqlite3, os
+import imp, sqlite3, os, sys
 
 import xlrd             #@UnresolvedImport
 
@@ -30,10 +30,15 @@ def import_model(model_to_import,sheet_to_import):
             if(map_item[0] == "self") :
                 #if it is not a index item write the actual value                            
                 query_value += ("\""+worksheet.row_values(row_index)[int(map_item[2] - 1)]+"\", ")
-            else :
+                query_column += (map_item[1]+", ")
+            elif (map_item[0] == "default") :
+                query_value += ("\""+map_item[2]+"\", ")
+                query_column += (map_item[1]+", ")                                              
+            elif (map_item[0] == "link") :
                 # Write the actual value instead of the index number by using a sub query (ex enclosure_boo instead of 3)
-                sub_query = "SELECT id FROM "+config_file.PROJECT_TABLE_PREFIX+map_item[0][0]+" WHERE "
-                sub_query += map_item[0][1]+"=\""+worksheet.row_values(row_index)[int(map_item[2] - 1)]+"\""
+                sub_query = "SELECT id FROM "+config_file.PROJECT_TABLE_PREFIX+map_item[1][0]+" WHERE "
+                sub_query += map_item[1][1]+"=\""+worksheet.row_values(row_index)[int(map_item[2] - 1)]+"\""
+                query_column += (map_item[1][2]+", ")
                 print "....... trying sub query -> "+sub_query
                 try :                        
                     sub_cursor.execute(sub_query)
@@ -41,10 +46,9 @@ def import_model(model_to_import,sheet_to_import):
                     query_value += ("\""+value+"\", ")
                 except Exception as e:
                     query_value += ("null, ")
-                
-                
-            
-            query_column += (map_item[1]+", ")                        
+            else :
+                print "ERROR -> Poorly formed map",
+                sys.exit()                                    
         pass
         
         #remove trailing commas
@@ -78,7 +82,9 @@ def main():
     import_model("virtual_additional_ip","virtual_additional_ip")    
     import_model("storage","storage")
     import_model("storage_additional_ip","storage_additional_ip")
-    import_model("storage_wire_run","storage_wire_run")            
+    import_model("storage_wire_run","storage_wire_run")       
+    import_model("ancillary","ancillary")
+    import_model("ancillary_additional_ip","ancillary_additional_ip")                
    
 if __name__ == '__main__':
     main()

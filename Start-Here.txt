@@ -3,6 +3,20 @@
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
 
+#Install pip
+curl http://python-distribute.org/distribute_setup.py | python
+
+#AS ROOT -> Install Django and modules
+pip install Django
+pip install xlwt
+pip install xlrd
+
+
+
+-----------------old-----------------------
+
+
+
 #install mysql
 yum install mysql-server
 service mysqld start
@@ -12,17 +26,10 @@ yum install MySQL-python
 
 yum install mod_wsgi
 
-#Install pip
-curl http://python-distribute.org/distribute_setup.py | python
 
-#AS ROOT -> Install Django and modules
-pip install Django
-->pip install django-import-export
-<-pip install xlwt
-<-pip install xlrd
+mkdir /etc/linux-admin-toolkit/
 
 mkdir /opt/linux-admin-toolkit
-mkdir /etc/linux-admin-toolkit/
 
 wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
 tar xvfz linux-admin-toolkit_(Build Date).tgz
@@ -82,20 +89,3 @@ rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10.
 ----------------------------Development Notes----------------------------------------
 #Can develop against repository with
 #config_path = "/home/sysadmin/workspace/linux-admin-toolkit/local-config-example/"
-
-
-
-------------------------------To Do ---------------------------------
-Notes field
-allow blanks
-IP address allocation and hostname report
-
-
-
-
-
-
-
-
-
-

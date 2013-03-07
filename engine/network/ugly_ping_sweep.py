@@ -30,10 +30,11 @@ def main() :
                 print item[0]+" is Live Executing ->"+"UPDATE "+table+" SET "+columns[2]+"=1 "+"WHERE "+columns[1]+"=\""+item[0]+"\""                
                 cursor.execute("UPDATE "+table+" SET "+columns[2]+"=1 "+"WHERE "+columns[1]+"=\""+item[0]+"\"")
                 pass
+            db_connection.commit()
         pass        
     pass
 
-    db_connection.commit()
+    
     db_connection.close()
 if __name__ == '__main__':
     main()
