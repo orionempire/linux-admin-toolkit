@@ -21,9 +21,9 @@ rm -fr /var/linux-admin-toolkit/
 mkdir -p /opt/linux-admin-toolkit/
 wget http://linux-admin-toolkit.googlecode.com/git/packages/linux-admin-toolkit_current.tgz
 tar xvfz linux-admin-toolkit_current.tgz
-mv linux-admin-toolkit_current /opt/linux-admin-toolkit/
+mv linux-admin-toolkit /opt/
 chown -R apache.apache /opt/linux-admin-toolkit/
-rm linux-admin-toolkit_current.tgz
+rm -f linux-admin-toolkit_current.tgz
 
 
 ##Create the data location
@@ -59,8 +59,10 @@ EOF
 chkconfig httpd on
 service httpd start
 
-yum install xterm
+yum -y install xterm
 
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-X11-Protocol-0.56-4.el6.noarch.rpm
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-Tk-804.028-12.el6.x86_64.rpm
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/clusterssh-3.28-2.el6.noarch.rpm
+         
+

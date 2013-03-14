@@ -2,8 +2,7 @@
 
 # build command
 cd /home/sysadmin/workspace 
-tar cvzf linux-admin-toolkit_current.tgz linux-admin-toolkit/; mv -f linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/
-##refresh eclipse
+ttar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
 
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
@@ -19,81 +18,5 @@ pip install xlrd
 rm install.sh; wget http://linux-admin-toolkit.googlecode.com/git/install.sh; chmod a+x install.sh
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----------------------------------------old------------------------------------------------------
-wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
-tar xvfz linux-admin-toolkit_(Build Date).tgz
-
-cp -R linux-admin-toolkit /opt/linux-admin-toolkit/
-
-# Change your secret key in /opt/linux-admin-toolkit/frontend/frontend/settings.py
-# python -c 'import random; print "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])'
-
-#add to  /etc/httpd/conf/httpd.conf
-<VirtualHost *:80>
-
-    ServerName wsgi.djangoserver
-    DocumentRoot /opt/linux-admin-toolkit/frontend
-
-    <Directory /opt/linux-admin-toolkit/frontend>
-        Order allow,deny
-        Allow from all
-    </Directory>
-
-    WSGIScriptAlias / /opt/linux-admin-toolkit/frontend/frontend/wsgi.py
-
-    Alias /static/admin/ /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/
-
-    <Directory /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin>
-        Order deny,allow
-        Allow from all
-    </Directory>
-
-</VirtualHost>
-
-#turn on apache
-service httpd start
-chkconfig httpd on
-
-
--------------------cluster ssh---------------------
-wget ftp://rpmfind.net/linux/epel/6/x86_64/perl-Tk-804.028-12.el6.x86_64.rpm
-rpm -Uvh perl-Tk-804.028-12.el6.x86_64.rpm
-wget ftp://rpmfind.net/linux/epel/6/x86_64/perl-X11-Protocol-0.56-4.el6.noarch.rpm
-rpm -Uvh perl-X11-Protocol-0.56-4.el6.noarch.rpm
-
-yum install xterm 
-
-wget ftp://rpmfind.net/linux/epel/6/x86_64/clusterssh-3.28-2.el6.noarch.rpm
-rpm -Uvh clusterssh-3.28-2.el6.noarch.rpm
-
-
-#Sync build script with base image, implies a saved ssh key
-rsync -avz --delete /home/sysadmin/workspace/linux-admin-toolkit/build/ root@10..10.200:/root/admin/
 
 
