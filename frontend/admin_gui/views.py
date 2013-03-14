@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 
+#version 00.00.10
 import os
 
 def default(request):    
@@ -9,9 +10,9 @@ def ping_sweep(request):
     if not request.user.is_staff:
         return Http404
     else : 
-        cmd = os.path.join(os.path.dirname(__file__),'../../engine/network/ugly_ping_sweep.py')        
-        os.system("echo \""+cmd+"\" | at now")
-        return HttpResponse("Kicked off a ugly ping sweep.")
+        cmd_to_run = os.path.join(os.path.dirname(__file__),'../../engine/network/ugly_ping_sweep.py >> /tmp/ping_sweep.log ')        
+        os.system("echo \""+cmd_to_run+"\" | at now")
+        return HttpResponse("Kicked off a ugly ping sweep. ("+cmd_to_run+")")
         
 def kill_ping_sweep(request):
     if not request.user.is_staff:

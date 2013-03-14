@@ -59,10 +59,7 @@ def do_generate() :
             cluster_map['virtual_servers'].append(entity[0])
             cluster_map["admin_group_"+entity[1]].append(entity[0])
             cluster_map["admin_group_"+entity[2]].append(entity[0])
-                        
-        
-        
-        print cluster_map.items()
+                                            
         
         print("Building Cluster file....")                
         try:

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#Version 00.00.09
+#Version 00.00.10
 
 ##Install pip
 #curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
@@ -18,7 +18,7 @@ rm -fr /opt/linux-admin-toolkit/
 mv /var/linux-admin-toolkit/server_inventory_import_export.xls /var/linux-admin-toolkit/archive/server_inventory_import_export_`date +"%H-%M_%m-%d-%Y"`.xls 
 
  
- service httpd stop
+service httpd stop
 ##Get and install the code
 mkdir -p /opt/linux-admin-toolkit/
 wget http://linux-admin-toolkit.googlecode.com/git/packages/linux-admin-toolkit_current.tgz
@@ -69,4 +69,8 @@ rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/clusterssh-3.28-
 
 cd /opt/linux-admin-toolkit/frontend
 python manage.py changepassword sysadmin
+
+echo "To import data run...."
+echo "cd /home/sysadmin/workspace" 
+echo "tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/" 
 
