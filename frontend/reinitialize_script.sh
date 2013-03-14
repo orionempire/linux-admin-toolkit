@@ -1,6 +1,6 @@
 #! /bin/bash
  
- #Version 00.00.08
+ #Version 00.00.09
  
 rm ../data/database.db
 
