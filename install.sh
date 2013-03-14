@@ -12,11 +12,12 @@
 
 ##archive old installs 
 mkdir -p /etc/configuration_file_archive/linux-admin-toolkit
-tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/
+tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/
 rm -fr /opt/linux-admin-toolkit/
-tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_export_`date +"%-%M_%m-%d-%Y"`.tgz /var/linux-admin-toolkit/
+tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_export_`date +"%H-%M_%m-%d-%Y"`.tgz /var/linux-admin-toolkit/
 rm -fr /var/linux-admin-toolkit/
  
+ service httpd stop
 ##Get and install the code
 mkdir -p /opt/linux-admin-toolkit/
 wget http://linux-admin-toolkit.googlecode.com/git/packages/linux-admin-toolkit_current.tgz
@@ -64,5 +65,7 @@ yum -y install xterm
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-X11-Protocol-0.56-4.el6.noarch.rpm
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-Tk-804.028-12.el6.x86_64.rpm
 rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/clusterssh-3.28-2.el6.noarch.rpm
-         
+
+cd /opt/linux-admin-toolkit/frontend
+python manage.py changepassword sysadmin
 
