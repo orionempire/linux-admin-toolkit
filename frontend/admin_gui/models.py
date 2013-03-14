@@ -180,8 +180,8 @@ class Storage_Wire_Run(models.Model):
         return self.storage
 
 #Model representing Ancillary devices and virtual machines
-class Ancillary(models.Model):
-    ancillary_name =  models.CharField(max_length=255, unique=True)
+class Auxilary(models.Model):
+    auxilary_name =  models.CharField(max_length=255, unique=True)
     primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)    
     purpose = models.CharField(max_length=255,default="none")
     point_of_contact = models.CharField(max_length=255,default="none")
@@ -195,12 +195,12 @@ class Ancillary(models.Model):
         return self.ancillary_name
 
 # Model representing any additional IPs used by a Ancillary device.    
-class Ancillary_Additional_IP(models.Model):  
-    ancillary = models.ForeignKey(Ancillary)
+class Auxilary_Additional_IP(models.Model):  
+    auxilary = models.ForeignKey(Auxilary)
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return self.ancillary
+        return self.auxilary
 
 ####################Setter Functions
 def make_selected(modeladmin, request, queryset):

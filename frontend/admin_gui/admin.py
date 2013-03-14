@@ -108,21 +108,21 @@ class Storage_Admin(admin.ModelAdmin):
     
 admin.site.register(Storage, Storage_Admin)
 
-class Ancillary_Additional_IP_Admin(admin.TabularInline):
-    model = Ancillary_Additional_IP
+class Auxilary_Additional_IP_Admin(admin.TabularInline):
+    model = Auxilary_Additional_IP
     readonly_fields = ['ip_active']
     extra = 1
 
-class Ancillary_Admin(admin.ModelAdmin):
-    list_display = ['ancillary_name','primary_ip_address','purpose','point_of_contact','location_code','service_tag','model','status','ip_active']    
+class Auxilary_Admin(admin.ModelAdmin):
+    list_display = ['auxilary_name','primary_ip_address','purpose','point_of_contact','location_code','service_tag','model','status','ip_active']    
     list_editable = ['status']
     list_filter=['purpose','location_code','model','status']
     ordering = ['primary_ip_address']
-    search_fields = ['ancillary_name','primary_ip_address','point_of_contact','service_tag']
+    search_fields = ['auxilary_name','primary_ip_address','point_of_contact','service_tag']
     readonly_fields = ['ip_active']
-    inlines = [Ancillary_Additional_IP_Admin]
+    inlines = [Auxilary_Additional_IP_Admin]
     actions = [make_active, make_inactive, make_maintenance]
     
-admin.site.register(Ancillary, Ancillary_Admin)
+admin.site.register(Auxilary, Auxilary_Admin)
 
 

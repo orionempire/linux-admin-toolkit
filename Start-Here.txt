@@ -1,5 +1,7 @@
 # Welcome to the linux admin toolkit 00.00.04
 
+# build command 
+# tar cvzf linux-admin-toolkit_current.tgz linux-admin-toolkit/; mv -f linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
 

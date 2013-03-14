@@ -121,8 +121,8 @@ def main():
     export_model(book, "storage_wire_run",["storage_wire_run"])
     export_model(book, "virtual",["virtual","virtual_detail","virtual_services"])
     export_model(book, "virtual_additional_ip",["virtual_additional_ip"])
-    export_model(book, "ancillary",["ancillary"])
-    export_model(book, "ancillary_additional_ip",["ancillary_additional_ip"])
+    export_model(book, "auxilary",["auxilary"])
+    export_model(book, "auxilary_additional_ip",["auxilary_additional_ip"])
     book.save(config_file.SPREADSHEET_TO_USE_NAME)
     
 def archive_globed_files(glb, preserve):

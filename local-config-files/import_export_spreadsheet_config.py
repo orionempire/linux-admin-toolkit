@@ -133,8 +133,8 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','destination_name',3],
         ['self','destination_port',4],                        
     ],  
-    'ancillary' : [
-        ['self','ancillary_name',1],
+    'auxilary' : [
+        ['self','auxilary_name',1],
         ['self','primary_ip_address',2],
         ['self','purpose',3],
         ['self','point_of_contact',4],
@@ -145,9 +145,9 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','note',9], 
         ['default','ip_active','False'],
     ],       
-    'ancillary_additional_ip' : [
+    'auxilary_additional_ip' : [
         #[['storage','storage_name'],'storage_id', 1],
-        ['link',['ancillary','ancillary_name','ancillary_id'], 1],
+        ['link',['auxilary','auxilary_name','auxilary_id'], 1],
         ['self','additional_ip',2], 
         ['default','ip_active','False'],         
     ],                              

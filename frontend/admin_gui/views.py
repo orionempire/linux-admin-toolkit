@@ -23,9 +23,10 @@ def kill_ping_sweep(request):
 def export_spreadsheet(request):
     if not request.user.is_staff:
         return Http404
-    else :                 
-        cmd = os.path.join(os.path.dirname(__file__),'../../engine/spreadsheet/export_spreadsheet.py')        
-        os.system("echo \""+cmd+"\" | at now")        
-        return HttpResponse("Exported Spreadsheet to /var/linux-admin-toolkit/server_inventory_import_export.xls'")
+    else :
+        cmd_to_run = os.path.join(os.path.dirname(__file__),'../../engine/spreadsheet/export_spreadsheet.py')
+        os.system(cmd_to_run)
+        return HttpResponse("Running -> "+cmd_to_run+". Exported Spreadsheet to /var/linux-admin-toolkit/server_inventory_import_export.xls")
+
         
     

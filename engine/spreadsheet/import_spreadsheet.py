@@ -84,8 +84,8 @@ def main():
     import_model("storage","storage")
     import_model("storage_additional_ip","storage_additional_ip")
     import_model("storage_wire_run","storage_wire_run")       
-    import_model("ancillary","ancillary")
-    import_model("ancillary_additional_ip","ancillary_additional_ip")                
+    import_model("auxilary","auxilary")
+    import_model("auxilary_additional_ip","auxilary_additional_ip")                
    
 if __name__ == '__main__':
     main()
