@@ -1,7 +1,10 @@
 # Welcome to the linux admin toolkit 00.00.04
 
-# build command 
-# tar cvzf linux-admin-toolkit_current.tgz linux-admin-toolkit/; mv -f linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/
+# build command
+cd /home/sysadmin/workspace 
+tar cvzf linux-admin-toolkit_current.tgz linux-admin-toolkit/; mv -f linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/
+##refresh eclipse
+
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
 
@@ -13,6 +16,36 @@ pip install Django
 pip install xlwt
 pip install xlrd
 
+rm install.sh; wget http://linux-admin-toolkit.googlecode.com/git/install.sh; chmod a+x install.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------old------------------------------------------------------
 wget http://linux-admin-toolkit.googlecode.com/files/linux-admin-toolkit_(Build Date).tgz
 tar xvfz linux-admin-toolkit_(Build Date).tgz
 

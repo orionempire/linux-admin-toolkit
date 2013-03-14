@@ -19,7 +19,7 @@ rm -fr /var/linux-admin-toolkit/
  
 ##Get and install the code
 mkdir -p /opt/linux-admin-toolkit/
-wget http://code.google.com/p/linux-admin-toolkit/source/browse/packages/linux-admin-toolkit_current.tgz
+wget http://linux-admin-toolkit.googlecode.com/git/packages/linux-admin-toolkit_current.tgz
 tar xvfz linux-admin-toolkit_current.tgz
 mv linux-admin-toolkit_current /opt/linux-admin-toolkit/
 chown -R apache.apache /opt/linux-admin-toolkit/
@@ -61,6 +61,6 @@ service httpd start
 
 yum install xterm
 
-rpm -Uvh http://code.google.com/p/linux-admin-toolkit/source/browse/packages/perl-X11-Protocol-0.56-4.el6.noarch.rpm
-rpm -Uvh http://code.google.com/p/linux-admin-toolkit/source/browse/packages/perl-Tk-804.028-12.el6.x86_64.rpm
-rpm -Uvh http://code.google.com/p/linux-admin-toolkit/source/browse/packages/clusterssh-3.28-2.el6.noarch.rpm
+rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-X11-Protocol-0.56-4.el6.noarch.rpm
+rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/perl-Tk-804.028-12.el6.x86_64.rpm
+rpm -Uvh http://linux-admin-toolkit.googlecode.com/git/packages/clusterssh-3.28-2.el6.noarch.rpm
