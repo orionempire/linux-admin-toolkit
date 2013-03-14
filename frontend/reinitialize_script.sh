@@ -1,5 +1,7 @@
 #! /bin/bash
  
+ #Version 00.00.07
+ 
 rm ../data/database.db
 
 python manage.py syncdb --noinput

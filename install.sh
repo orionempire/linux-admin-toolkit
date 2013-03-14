@@ -1,5 +1,6 @@
 #! /bin/bash
 
+#Version 00.00.07
 
 ##Install pip
 #curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
@@ -12,9 +13,9 @@
 
 ##archive old installs 
 mkdir -p /etc/configuration_file_archive/linux-admin-toolkit
-tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/
+tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/ > /dev/null
 rm -fr /opt/linux-admin-toolkit/
-tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_export_`date +"%H-%M_%m-%d-%Y"`.tgz /var/linux-admin-toolkit/
+tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_export_`date +"%H-%M_%m-%d-%Y"`.tgz /var/linux-admin-toolkit/ > /dev/null
 rm -fr /var/linux-admin-toolkit/
  
  service httpd stop
