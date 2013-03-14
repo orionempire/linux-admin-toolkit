@@ -1,9 +1,12 @@
-# Welcome to the linux admin toolkit 00.00.07
+# Welcome to the linux admin toolkit 00.00.08
 
 # build command
 cd /home/sysadmin/workspace 
 tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
 
+#import command
+cd /opt/linux-admin-toolkit/frontend/;./reinitialize_script.sh;
+cd /opt/linux-admin-toolkit/engine/spreadsheet/; ./import_spreadsheet.py
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
 
