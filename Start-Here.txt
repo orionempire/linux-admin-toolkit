@@ -2,7 +2,7 @@
 
 # build command
 cd /home/sysadmin/workspace 
-ttar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
+tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
 
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 #Starting with the developer workstation build
