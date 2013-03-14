@@ -71,6 +71,5 @@ cd /opt/linux-admin-toolkit/frontend
 python manage.py changepassword sysadmin
 
 echo "To import data run...."
-echo "cd /home/sysadmin/workspace" 
-echo "tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/" 
-
+echo "cd /opt/linux-admin-toolkit/frontend/;./reinitialize_script.sh;"
+echo "cd /opt/linux-admin-toolkit/engine/spreadsheet/; ./import_spreadsheet.py"
