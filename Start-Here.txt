@@ -1,7 +1,8 @@
-# Welcome to the linux admin toolkit 00.00.09
+# Welcome to the linux admin toolkit 00.00.11
 
 # build command
 cd /home/sysadmin/workspace 
+rm -f linux-admin-toolkit/packages/linux-admin-toolkit_current.tgz 
 tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
 
 #import command

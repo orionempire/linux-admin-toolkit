@@ -1,6 +1,6 @@
 #! /bin/bash
 
-#Version 00.00.10
+#Version 00.00.11
 
 ##Install pip
 #curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py
