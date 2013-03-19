@@ -35,8 +35,8 @@ def main ():
         # exit
         if choice == "q" or choice == "Q":
             print "Don't for get to ....."
-        for item in reminders :
-            print item
+            for item in reminders :
+                print item
                 sys.exit(0)
         # launch
         elif choice == "l" or choice == "L":

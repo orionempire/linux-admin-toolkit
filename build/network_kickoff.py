@@ -35,7 +35,8 @@ def config_network():
 pass
 
 def config_domain():
-     #backup and then edit /etc/hosts
+    #backup and then edit /etc/hosts
+    # could also use echo -e "`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1` \t`hostname -s`\t`hostname`" >> /etc/hosts
     arch_globed_files("/etc/hosts","y")
     add_unique_entry_to_file("/etc/hosts", sys.argv[2]+"."+sys.argv[3],  
                                         sys.argv[2]+"."+sys.argv[3]+"\t"+sys.argv[1]+".thejavelin.com"+"\t"+sys.argv[1])
@@ -138,15 +139,15 @@ if __name__ == '__main__':
         sys.exit()
     pass
 
-
-    if(len(sys.argv) != 4) :
+    if(len(sys.argv) == 4) :
+        main()        
+    else :
         print "Usage: "+sys.argv[0]+" hostname ipaddress_suffix ipaddress_postfix"
         print "Post install steps ...."
         print "1 - mount -t nfs "+nfs_server+" /mnt/admin_build_directory -o intr"
         print "2 - cd /mnt/admin_build_directory"
         sys.exit()
-    else :
-        main()
     pass
 
 pass
+

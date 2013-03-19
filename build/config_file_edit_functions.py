@@ -1,9 +1,11 @@
-import glob, os, datetime, fileinput, sys
+import glob, os, datetime, fileinput, sys, socket, re, shutil
 
+base_archive_directory = "never_set"
+default_file_owner = "never_set"
 
-#############################################################################
-###                      Helper Functions                                 ###
-#############################################################################
+###############################################################################
+###                    Configuration File Edit Functions                        ###
+###############################################################################
 # archive all files fitting a glob
 # if preserve is set to "n" destroy the original. 
 def arch_globed_files(glb, preserve):
@@ -60,3 +62,37 @@ def replace_all_occurances_of_a_phrase(file,search_exp,replace_exp):
         line = line.replace(search_exp,replace_exp)        
         sys.stdout.write(line)    # using write instead of print, squelches carriage returns
 
+###############################################################################
+###                            Utility Functions                                ###
+###############################################################################
+
+def deploy_files(file_list,source_dir,dest_dir,archive) :
+    if (archive == "y" or archive == "Y") :
+        arch_globed_files(destination,"n")
+    
+    
+    #first check for a glob passed as a string 
+    #then if any other string is passed suppress it from breaking into letters by making it a single list item
+    if( file_list == "*" ) :    
+        file_list = os.listdir(base_archive_directory+source_dir)
+    elif( type(file_list) == type( str())) :        
+        file_list = [''.join(file_list)]
+        
+    for item in file_list :
+        print "Deploying -> "+base_archive_directory+source_dir+item+" | To -> "+dest_dir+item        
+        shutil.copyfile(base_archive_directory+source_dir+item,dest_dir+item)
+        os.system("chown "+default_file_owner+" "+dest_dir+item)
+        os.system("chmod g+rw "+dest_dir+item)
+    pass    
+
+#Return the systems ip address unless it is localhost then throw error
+def get_system_ip_address():
+    ip_address = socket.gethostbyname(socket.gethostname()) 
+    
+    if (re.search('^127.',ip_address)) :
+        raise LocalHostFound("ERROR - Official ip address is localhost")
+    else :
+        return ip_address
+
+def log_item(the_level, the_item) :
+    print the_level+" - "+the_item
