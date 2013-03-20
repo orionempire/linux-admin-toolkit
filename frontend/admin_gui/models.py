@@ -127,7 +127,7 @@ class Virtual_Detail(models.Model):
     os = models.CharField(max_length=255,blank=True)
     base_image = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
-        return self.virtual
+        return unicode(self.virtual)
     
 class Virtual_Services(models.Model):
     virtual = models.OneToOneField(Virtual)
@@ -135,7 +135,7 @@ class Virtual_Services(models.Model):
     admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
     script_profile = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
-        return self.virtual
+        return unicode(self.virtual)
     
 # Model representing any additional IPs used by a storage device.    
 class Virtual_Additional_IP(models.Model):  
@@ -143,7 +143,7 @@ class Virtual_Additional_IP(models.Model):
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return self.virtual
+        return unicode(self.virtual)
     
 ###### Storage ######
 
@@ -168,7 +168,7 @@ class Storage_Additional_IP(models.Model):
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return self.storage
+        return unicode(self.storage)
 
 # Model representing wire running from device to switch    
 class Storage_Wire_Run(models.Model):  
@@ -177,7 +177,7 @@ class Storage_Wire_Run(models.Model):
     destination_name = models.CharField(max_length=255,blank=True)
     destination_port = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
-        return self.storage
+        return unicode(self.storage)
 
 #Model representing Ancillary devices and virtual machines
 class Auxilary(models.Model):
@@ -200,7 +200,7 @@ class Auxilary_Additional_IP(models.Model):
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return self.auxilary
+        return unicode(self.auxilary)
 
 ####################Setter Functions
 def make_selected(modeladmin, request, queryset):
