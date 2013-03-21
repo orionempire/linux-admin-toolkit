@@ -70,6 +70,12 @@ def deploy_files(file_list,source_dir,dest_dir,archive) :
     if (archive == "y" or archive == "Y") :
         arch_globed_files(destination,"n")
     
+    #create the destination if it does not yet exist.
+    try:    
+        os.makedirs(dest_dir)
+    #ignore exception thrown if directory exists
+    except :        
+        pass
     
     #first check for a glob passed as a string 
     #then if any other string is passed suppress it from breaking into letters by making it a single list item

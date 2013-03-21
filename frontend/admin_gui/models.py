@@ -20,7 +20,7 @@ class Enclosure(models.Model):
     note = models.TextField(max_length=1024,default="none")    
     ip_active = models.BooleanField(default=False) 
     def __unicode__(self):        
-        return self.enclosure_name
+        return unicode(self.enclosure_name)
 
 # Model representing any additional IPs used by a blade enclosure.    
 class Enclosure_Detail(models.Model):  
@@ -63,7 +63,7 @@ class Physical(models.Model):
     selected = models.BooleanField(default=False) 
     ip_active = models.BooleanField(default=False)            
     def __unicode__(self):        
-       return self.physical_name
+       return unicode(self.physical_name)
        
 # A one to one extension of the physical machine list      
 class Physical_Detail(models.Model):
@@ -118,7 +118,7 @@ class Virtual(models.Model):
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")       
     def __unicode__(self):        
-        return self.virtual_name
+        return unicode(self.virtual_name)
 
 # A one to one extension of the virtual machine list 
 class Virtual_Detail(models.Model):
@@ -160,7 +160,7 @@ class Storage(models.Model):
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")  
     def __unicode__(self):        
-        return self.storage_name
+        return unicode(self.storage_name)
     
 # Model representing any additional IPs used by a storage device.    
 class Storage_Additional_IP(models.Model):  
@@ -192,7 +192,7 @@ class Auxilary(models.Model):
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")  
     def __unicode__(self):        
-        return self.ancillary_name
+        return unicode(self.auxilary_name)
 
 # Model representing any additional IPs used by a Ancillary device.    
 class Auxilary_Additional_IP(models.Model):  
