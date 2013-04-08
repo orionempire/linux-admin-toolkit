@@ -1,8 +1,9 @@
 #! /bin/bash
  
- #Version 00.00.09
- 
+#Version 00.00.12
+
 rm ../data/database.db
+cd ../frontend/
 
 python manage.py syncdb --noinput
 
@@ -29,4 +30,3 @@ EOF
 python manage.py changepassword sysadmin
 chown apache.apache ../data/database.db
 
-echo "Intialization completed. Now import data." 

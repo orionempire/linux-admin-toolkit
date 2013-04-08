@@ -1,22 +1,8 @@
 #! /bin/bash
 
-#Version 00.00.11
+#Version 00.00.12
 
-if [ "$1" == "pre-install" ]
-then
-	pre-install
-elif [ "$1" == "code-install" ]
-then
-	code-install
-elif [ "$1" == "data-install" ]
-then 
-	data-install
-else 
-	echo "Usage ..."
-	echo "$0 pre-install|code-install|data-install"
-fi
-
-function pre-install {
+function pre-install(){
 	#Starting with the redhat el 6.4 developer workstation build
 	
 	##Install pip
@@ -39,7 +25,7 @@ function pre-install {
 	code-install
 }
 
-function code-install {
+function code-install(){
 	##archive old installs 
 	mkdir -p /etc/configuration_file_archive/linux-admin-toolkit
 	tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/ > /dev/null
@@ -91,13 +77,27 @@ EOF
 	service httpd start
 	
 	
-	cd /opt/linux-admin-toolkit/frontend
+	cd /opt/linux-admin-toolkit/frontend/
 	python manage.py changepassword sysadmin		
 }
-function data-install {
+function data-install(){
 	echo "Initiating data import using /var/linux-admin-toolkit/server_inventory_import_export.xls ...."
 	cd /opt/linux-admin-toolkit/installer_scripts/
 	./reinitialize_script.sh
 	cd /opt/linux-admin-toolkit/engine/spreadsheet/
 	./import_spreadsheet.py
 }
+
+if [ "$1" == "pre-install" ]
+then
+	pre-install
+elif [ "$1" == "code-install" ]
+then
+	code-install
+elif [ "$1" == "data-install" ]
+then 
+	data-install
+else 
+	echo "Usage ..."
+	echo "$0 pre-install|code-install|data-install"
+fi

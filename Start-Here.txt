@@ -8,8 +8,11 @@ mv linux-admin-toolkit_current.tgz linux-admin-toolkit/installer_scripts/
 echo "Dont forget to refresh eclipse before doing a git commit"
 
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
+rm -f install.sh; wget http://linux-admin-toolkit.googlecode.com/git/installer_scripts/install.sh; chmod a+x install.sh
+./install.sh pre-install
+./install.sh code-install
 
-rm install.sh; wget http://linux-admin-toolkit.googlecode.com/git/installer_scripts/install.sh; chmod a+x install.sh
-
-
+#to use testdata (or you can put a previous export at /var/linux-admin-toolkit/server_inventory_import_export.xls...)
+cp /opt/linux-admin-toolkit/data/server_inventory_import_export.xls /var/linux-admin-toolkit/server_inventory_import_export.xls
+./install.sh data-install
 
