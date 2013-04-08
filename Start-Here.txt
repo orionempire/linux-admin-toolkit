@@ -2,24 +2,14 @@
 
 # build command
 cd /home/sysadmin/workspace 
-rm -f linux-admin-toolkit/packages/linux-admin-toolkit_current.tgz 
-tar --exclude='linux-admin-toolkit/.git' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ ; mv linux-admin-toolkit_current.tgz linux-admin-toolkit/packages/ 
+rm -f linux-admin-toolkit/installer_scripts/linux-admin-toolkit_current.tgz 
+tar --exclude='linux-admin-toolkit/.git' --exclude='linux-admin-toolkit/documentation/screenshots' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ 
+mv linux-admin-toolkit_current.tgz linux-admin-toolkit/installer_scripts/ 
+echo "Dont forget to refresh eclipse before doing a git commit"
 
-#import command
-cd /opt/linux-admin-toolkit/frontend/;./reinitialize_script.sh;
-cd /opt/linux-admin-toolkit/engine/spreadsheet/; ./import_spreadsheet.py
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
-#Starting with the developer workstation build
 
-#Install pip
-curl http://python-distribute.org/distribute_setup.py | python
-
-#AS ROOT -> Install Django and modules
-pip install Django
-pip install xlwt
-pip install xlrd
-
-rm install.sh; wget http://linux-admin-toolkit.googlecode.com/git/install.sh; chmod a+x install.sh
+rm install.sh; wget http://linux-admin-toolkit.googlecode.com/git/installer_scripts/install.sh; chmod a+x install.sh
 
 
 
