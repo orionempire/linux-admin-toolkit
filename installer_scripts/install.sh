@@ -5,12 +5,15 @@
 if [ "$1" == "pre-install" ]
 then
 	pre-install
-elif [ "$1" == "install" ]
+elif [ "$1" == "code-install" ]
 then
-	install
+	code-install
+elif [ "$1" == "data-install" ]
+then 
+	data-install
 else 
 	echo "Usage ..."
-	echo "$0 pre-install|install"
+	echo "$0 pre-install|code-install|data-install"
 fi
 
 function pre-install {
@@ -24,6 +27,7 @@ function pre-install {
 	pip install Django
 	pip install xlwt
 	pip install xlrd
+	yum install mod_wsgi
 	
 	##Install packages needed to run clusterssh
 	yum -y install xterm
@@ -31,14 +35,16 @@ function pre-install {
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/perl-X11-Protocol-0.56-4.el6.noarch.rpm
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/perl-Tk-804.028-12.el6.x86_64.rpm
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/clusterssh-3.28-2.el6.noarch.rpm
+	
+	code-install
 }
 
-function install {
+function code-install {
 	##archive old installs 
 	mkdir -p /etc/configuration_file_archive/linux-admin-toolkit
 	tar cvzf /etc/configuration_file_archive/linux-admin-toolkit/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`.tgz /opt/linux-admin-toolkit/ > /dev/null
 	mv -f /opt/linux-admin-toolkit/ /tmp/linux-admin-toolkit_`date +"%H-%M_%m-%d-%Y"`/
-	mv /var/linux-admin-toolkit/server_inventory_import_export.xls /var/linux-admin-toolkit/archive/server_inventory_import_export_`date +"%H-%M_%m-%d-%Y"`.xls 
+	cp /var/linux-admin-toolkit/server_inventory_import_export.xls /var/linux-admin-toolkit/archive/server_inventory_import_export_`date +"%H-%M_%m-%d-%Y"`.xls 
 	
 	 
 	service httpd stop
@@ -86,9 +92,12 @@ EOF
 	
 	
 	cd /opt/linux-admin-toolkit/frontend
-	python manage.py changepassword sysadmin
-	
-	echo "To import data run...."
-	echo "cd /opt/linux-admin-toolkit/frontend/;./reinitialize_script.sh;"
-	echo "cd /opt/linux-admin-toolkit/engine/spreadsheet/; ./import_spreadsheet.py"
+	python manage.py changepassword sysadmin		
+}
+function data-install {
+	echo "Initiating data import using /var/linux-admin-toolkit/server_inventory_import_export.xls ...."
+	cd /opt/linux-admin-toolkit/installer_scripts/
+	./reinitialize_script.sh
+	cd /opt/linux-admin-toolkit/engine/spreadsheet/
+	./import_spreadsheet.py
 }
