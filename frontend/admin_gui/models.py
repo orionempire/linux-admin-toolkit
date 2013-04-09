@@ -105,9 +105,9 @@ class Physical_Wire_Run(models.Model):
 
 ###### Virtual Machines ######
  
-# Model representing a list of virtual machines. Must be hosted on a physical machine  
-class Virtual(models.Model):
-    virtual_name = models.CharField( max_length=255, unique=True)
+# Model representing a list of virtual machines running linux. Expected to  be hosted on a physical machine  
+class Linux_Virtual(models.Model):
+    linux_virtual_name = models.CharField(max_length=255, unique=True)
     primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)   
     role = models.CharField(max_length=255,default="none")
     purpose = models.CharField(max_length=255,default="none")
@@ -118,32 +118,64 @@ class Virtual(models.Model):
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")       
     def __unicode__(self):        
-        return unicode(self.virtual_name)
+        return unicode(self.linux_virtual_name)
 
 # A one to one extension of the virtual machine list 
-class Virtual_Detail(models.Model):
-    virtual = models.OneToOneField(Virtual)
+class Linux_Virtual_Detail(models.Model):
+    linux_virtual = models.OneToOneField(Linux_Virtual)
     size = models.CharField(max_length=255,blank=True)
     os = models.CharField(max_length=255,blank=True)
     base_image = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
-        return unicode(self.virtual)
+        return unicode(self.linux_virtual)
     
-class Virtual_Services(models.Model):
-    virtual = models.OneToOneField(Virtual)
+class Linux_Virtual_Services(models.Model):
+    linux_virtual = models.OneToOneField(Linux_Virtual)
     admin_cluster_group_01 = models.CharField(max_length=255,blank=True)
     admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
     script_profile = models.CharField(max_length=255,blank=True)
     def __unicode__(self):        
-        return unicode(self.virtual)
+        return unicode(self.linux_virtual)
     
 # Model representing any additional IPs used by a storage device.    
-class Virtual_Additional_IP(models.Model):  
-    virtual = models.ForeignKey(Virtual)
+class Linux_Virtual_Additional_IP(models.Model):  
+    linux_virtual = models.ForeignKey(Linux_Virtual)
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return unicode(self.virtual)
+        return unicode(self.linux_virtual)
+
+# Model representing a list of virtual machines running Non-Linux-OSs. Expected to  be hosted on a physical machine  
+class Other_Virtual(models.Model):
+    other_virtual_name = models.CharField(max_length=255, unique=True)
+    primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)   
+    role = models.CharField(max_length=255,default="none")
+    purpose = models.CharField(max_length=255,default="none")
+    point_of_contact = models.CharField(max_length=255,default="none")    
+    host_physical_name = models.ForeignKey(Physical, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    selected = models.BooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
+    note = models.TextField(max_length=1024,default="none")       
+    def __unicode__(self):        
+        return unicode(self.other_virtual_name)
+
+# A one to one extension of the virtual machine list 
+class Other_Virtual_Detail(models.Model):
+    other_virtual = models.OneToOneField(Other_Virtual)
+    size = models.CharField(max_length=255,blank=True)
+    os = models.CharField(max_length=255,blank=True)
+    base_image = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+        return unicode(self.other_virtual)    
+    
+# Model representing any additional IPs used by a storage device.    
+class Other_Virtual_Additional_IP(models.Model):  
+    other_virtual = models.ForeignKey(Other_Virtual)
+    additional_ip = models.GenericIPAddressField(unique=True)
+    ip_active = models.BooleanField(default=False)
+    def __unicode__(self):        
+        return unicode(self.other_virtual)
     
 ###### Storage ######
 
@@ -179,9 +211,28 @@ class Storage_Wire_Run(models.Model):
     def __unicode__(self):        
         return unicode(self.storage)
 
+class Storage_Volume(models.Model): 
+    volume_name = models.CharField(max_length=255, unique=True)
+    size = models.CharField(max_length=255,default="none")
+    mount_point = models.CharField(max_length=255,default="none")
+    role = models.CharField(max_length=255,default="none")
+    purpose = models.CharField(max_length=255,default="none")
+    host_storage_name = models.ForeignKey(Storage, null=True, blank=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
+    def __unicode__(self):        
+        return unicode(self.volume_name)
+
+class Storage_Volume_Note(models.Model):
+    storage_volume = models.ForeignKey(Storage_Volume)
+    note = models.TextField(max_length=1024,default="none")
+    def __unicode__(self):        
+        return unicode(self.storage_volume)
+
+###### Network Devices######
+
 #Model representing Ancillary devices and virtual machines
-class Auxilary(models.Model):
-    auxilary_name =  models.CharField(max_length=255, unique=True)
+class Network(models.Model):
+    network_name =  models.CharField(max_length=255, unique=True)
     primary_ip_address = models.GenericIPAddressField(unique=True,blank=True,null=True)    
     purpose = models.CharField(max_length=255,default="none")
     point_of_contact = models.CharField(max_length=255,default="none")
@@ -192,15 +243,24 @@ class Auxilary(models.Model):
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")  
     def __unicode__(self):        
-        return unicode(self.auxilary_name)
+        return unicode(self.network_name)
 
 # Model representing any additional IPs used by a Ancillary device.    
-class Auxilary_Additional_IP(models.Model):  
-    auxilary = models.ForeignKey(Auxilary)
+class Network_Additional_IP(models.Model):  
+    network = models.ForeignKey(Network)
     additional_ip = models.GenericIPAddressField(unique=True)
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
-        return unicode(self.auxilary)
+        return unicode(self.network)
+
+# Model representing wire running from device to switch    
+class Network_Wire_Run(models.Model):  
+    network = models.ForeignKey(Network)
+    source_port = models.CharField(max_length=255,blank=True)
+    destination_name = models.CharField(max_length=255,blank=True)
+    destination_port = models.CharField(max_length=255,blank=True)
+    def __unicode__(self):        
+        return unicode(self.network)
 
 ####################Setter Functions
 def make_selected(modeladmin, request, queryset):

@@ -14,7 +14,7 @@ class Enclosure_Wire_Run_Admin(admin.TabularInline):
     extra = 1
     
 class Enclosure_Detail_Admin(admin.TabularInline):
-    model = Enclosure_Detail    
+    model = Enclosure_Detail
     
 class Enclosure_Admin(admin.ModelAdmin):
     list_display = ['enclosure_name','primary_ip_address','location_code','point_of_contact','status','ip_active']    
@@ -31,7 +31,7 @@ admin.site.register(Enclosure, Enclosure_Admin)
 
 # Admin view of all physical servers and blades.
 class Physical_Detail_Admin(admin.TabularInline):
-    model = Physical_Detail    
+    model = Physical_Detail
     readonly_fields = ['console_ip_active']
     
 class Physical_Services_Admin(admin.TabularInline):
@@ -59,32 +59,53 @@ class Physical_Admin(admin.ModelAdmin):
     
 admin.site.register(Physical, Physical_Admin )
 
-# Admin view of all physical servers and blades.    
-class Virtual_Detail_Admin(admin.TabularInline):
-    model = Virtual_Detail
+# Admin view of virtual machines running the linux os.    
+class Linux_Virtual_Detail_Admin(admin.TabularInline):
+    model = Linux_Virtual_Detail
     extra = 1
 
-class Virtual_Services_Admin(admin.TabularInline):
-    model = Virtual_Services
+class Linux_Virtual_Services_Admin(admin.TabularInline):
+    model = Linux_Virtual_Services
     extra = 1
         
-class Virtual_Additional_IP_Admin(admin.TabularInline):
-    model = Virtual_Additional_IP
+class Linux_Virtual_Additional_IP_Admin(admin.TabularInline):
+    model = Linux_Virtual_Additional_IP
     readonly_fields = ['ip_active']
     extra = 1
         
-class Virtual_Admin(admin.ModelAdmin):
-    list_display = ['virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status','selected','ip_active']    
+class Linux_Virtual_Admin(admin.ModelAdmin):
+    list_display = ['linux_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status','selected','ip_active']    
     list_editable = ['status','selected']
     list_filter=['role','purpose','host_physical_name','status']
     ordering = ['primary_ip_address']
-    search_fields = ['virtual_name','primary_ip_address','point_of_contact']
+    search_fields = ['linux_virtual_name','primary_ip_address','point_of_contact']
     readonly_fields = ['ip_active']
-    inlines = [Virtual_Detail_Admin, Virtual_Services_Admin, Virtual_Additional_IP_Admin]
+    inlines = [Linux_Virtual_Detail_Admin, Linux_Virtual_Services_Admin, Linux_Virtual_Additional_IP_Admin]
     actions = [make_selected, make_unselected, make_active, make_inactive, make_maintenance]    
     
-admin.site.register(Virtual, Virtual_Admin)
+admin.site.register(Linux_Virtual, Linux_Virtual_Admin)
 
+# Admin view of virtual machines running the a non-linux os.    
+class Other_Virtual_Detail_Admin(admin.TabularInline):
+    model = Other_Virtual_Detail
+    extra = 1
+        
+class Other_Virtual_Additional_IP_Admin(admin.TabularInline):
+    model = Other_Virtual_Additional_IP
+    readonly_fields = ['ip_active']
+    extra = 1
+        
+class Other_Virtual_Admin(admin.ModelAdmin):
+    list_display = ['other_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status','selected','ip_active']    
+    list_editable = ['status','selected']
+    list_filter=['role','purpose','host_physical_name','status']
+    ordering = ['primary_ip_address']
+    search_fields = ['other_virtual_name','primary_ip_address','point_of_contact']
+    readonly_fields = ['ip_active']
+    inlines = [Other_Virtual_Detail_Admin, Other_Virtual_Additional_IP_Admin]
+    actions = [make_selected, make_unselected, make_active, make_inactive, make_maintenance]    
+    
+admin.site.register(Other_Virtual, Other_Virtual_Admin)
     
 class Storage_Additional_IP_Admin(admin.TabularInline):
     model = Storage_Additional_IP
@@ -94,8 +115,7 @@ class Storage_Additional_IP_Admin(admin.TabularInline):
 class Storage_Wire_Run_Admin(admin.TabularInline):
     model = Storage_Wire_Run
     extra = 1
-    
-        
+            
 class Storage_Admin(admin.ModelAdmin):
     list_display = ['storage_name','primary_ip_address','purpose','point_of_contact','location_code','service_tag','model','status','ip_active']    
     list_editable = ['status']
@@ -108,21 +128,42 @@ class Storage_Admin(admin.ModelAdmin):
     
 admin.site.register(Storage, Storage_Admin)
 
-class Auxilary_Additional_IP_Admin(admin.TabularInline):
-    model = Auxilary_Additional_IP
+class Storage_Volume_Note_Admin(admin.TabularInline):
+    model = Storage_Volume_Note
+    extra = 1
+    
+class Storage_Volume_Admin(admin.ModelAdmin):
+    list_display = ['volume_name','size','mount_point','role','purpose','host_storage_name','status']    
+    list_display = ['volume_name','size','mount_point','role','purpose','status']
+    list_editable = ['status']
+    list_filter=['role','purpose','host_storage_name']
+    ordering = ['volume_name']
+    search_fields = ['volume_name','size','mount_point','role','purpose','host_storage_name']
+    search_fields = ['volume_name','size','mount_point','role','purpose']    
+    inlines = [Storage_Volume_Note_Admin]
+    actions = [make_active, make_inactive, make_maintenance]
+    
+admin.site.register(Storage_Volume, Storage_Volume_Admin)
+    
+class Network_Additional_IP_Admin(admin.TabularInline):
+    model = Network_Additional_IP
     readonly_fields = ['ip_active']
     extra = 1
 
-class Auxilary_Admin(admin.ModelAdmin):
-    list_display = ['auxilary_name','primary_ip_address','purpose','point_of_contact','location_code','service_tag','model','status','ip_active']    
+class Network_Wire_Run_Admin(admin.TabularInline):
+    model = Network_Wire_Run
+    extra = 1
+
+class Network_Admin(admin.ModelAdmin):
+    list_display = ['network_name','primary_ip_address','purpose','point_of_contact','location_code','service_tag','model','status','ip_active']    
     list_editable = ['status']
     list_filter=['purpose','location_code','model','status']
     ordering = ['primary_ip_address']
-    search_fields = ['auxilary_name','primary_ip_address','point_of_contact','service_tag']
+    search_fields = ['network_name','primary_ip_address','point_of_contact','service_tag']
     readonly_fields = ['ip_active']
-    inlines = [Auxilary_Additional_IP_Admin]
+    inlines = [Network_Additional_IP_Admin, Network_Wire_Run_Admin]
     actions = [make_active, make_inactive, make_maintenance]
     
-admin.site.register(Auxilary, Auxilary_Admin)
+admin.site.register(Network, Network_Admin)
 
 

@@ -15,7 +15,13 @@ def import_model(model_to_import,sheet_to_import):
     db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db'))   
         
     book = xlrd.open_workbook(config_file.SPREADSHEET_TO_USE_NAME)
-    worksheet = book.sheet_by_name(sheet_to_import)        
+    try :
+        worksheet = book.sheet_by_name(sheet_to_import)
+    except Exception as e:
+        print "ERROR -> (NON-FATAL) Requested worksheet ("+sheet_to_import+") not in spreadsheet."
+        return
+    pass
+           
     
     for row_index in xrange(1,worksheet.nrows):
         cursor = db_connection.cursor ()
@@ -77,15 +83,21 @@ def main():
     import_model("physical_services","physical")
     import_model("physical_additional_ip","physical_additional_ip")
     import_model("physical_wire_run","physical_wire_run")
-    import_model("virtual","virtual")
-    import_model("virtual_detail","virtual")
-    import_model("virtual_services","virtual")
-    import_model("virtual_additional_ip","virtual_additional_ip")    
+    import_model("linux_virtual","linux_virtual")
+    import_model("linux_virtual_detail","linux_virtual")
+    import_model("linux_virtual_services","linux_virtual")
+    import_model("linux_virtual_additional_ip","linux_virtual_additional_ip")  
+    import_model("other_virtual","other_virtual")
+    import_model("other_virtual_detail","other_virtual")
+    import_model("other_virtual_additional_ip","other_virtual_additional_ip")   
     import_model("storage","storage")
     import_model("storage_additional_ip","storage_additional_ip")
     import_model("storage_wire_run","storage_wire_run")       
-    import_model("auxilary","auxilary")
-    import_model("auxilary_additional_ip","auxilary_additional_ip")                
+    import_model("storage_volume","storage_volume")
+    import_model("storage_volume_note","storage_volume_note")
+    import_model("network","network")
+    import_model("network_additional_ip","network_additional_ip")
+    import_model("network_wire_run","network_wire_run")                
    
 if __name__ == '__main__':
     main()

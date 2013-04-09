@@ -13,7 +13,7 @@ function pre-install(){
 	pip install Django
 	pip install xlwt
 	pip install xlrd
-	yum install mod_wsgi
+	yum -y install mod_wsgi
 	
 	##Install packages needed to run clusterssh
 	yum -y install xterm

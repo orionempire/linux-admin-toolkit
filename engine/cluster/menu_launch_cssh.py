@@ -19,21 +19,21 @@ def do_generate() :
         cursor = db_connection.cursor()
 
         # Cache a list of physical and virtual servers from the database
-        virtual_query = "SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected "
-        virtual_query += "FROM admin_gui_virtual JOIN admin_gui_virtual_services ON virtual_id=admin_gui_virtual.id"
+        linux_virtual_query = "SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected "
+        linux_virtual_query += "FROM admin_gui_linux_virtual JOIN admin_gui_linux_virtual_services ON linux_virtual_id=admin_gui_linux_virtual.id"
         #print "Executing -> "+virtual_query
-        cursor.execute(virtual_query)
+        cursor.execute(linux_virtual_query)
         physical_machine_list = cursor.fetchall()  
         physical_query = "SELECT primary_ip_address, admin_cluster_group_01, admin_cluster_group_02, selected "
         physical_query += "FROM admin_gui_physical JOIN admin_gui_physical_services ON physical_id=admin_gui_physical.id"        
         #print "Executing -> "+physical_query
         cursor.execute(physical_query)
-        virtual_machine_list = cursor.fetchall()
+        linux_virtual_machine_list = cursor.fetchall()
         
         cluster_map = dict()
         cluster_map['all_servers'] = []
         cluster_map['physical_servers'] = []
-        cluster_map['virtual_servers'] = []
+        cluster_map['linux_virtual_servers'] = []
         
         # Build a list of of all of the used admin groups        
         for item in physical_machine_list : 
@@ -41,7 +41,7 @@ def do_generate() :
             cluster_map["admin_group_"+item[2]] = []            
         pass        
             
-        for item in virtual_machine_list :                    
+        for item in linux_virtual_machine_list :                    
             cluster_map["admin_group_"+item[1]] = []
             cluster_map["admin_group_"+item[2]] = []            
         pass
@@ -54,9 +54,9 @@ def do_generate() :
             cluster_map["admin_group_"+entity[2]].append(entity[0])
                         
                     
-        for entity in virtual_machine_list :
+        for entity in linux_virtual_machine_list :
             cluster_map['all_servers'].append(entity[0])
-            cluster_map['virtual_servers'].append(entity[0])
+            cluster_map['linux_virtual_servers'].append(entity[0])
             cluster_map["admin_group_"+entity[1]].append(entity[0])
             cluster_map["admin_group_"+entity[2]].append(entity[0])
                                             

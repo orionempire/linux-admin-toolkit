@@ -6,6 +6,10 @@ PING_SWEEP_TABLES = {
     'admin_gui_physical_detail' : ['physical_id', 'console_address', 'console_ip_active'],
     'admin_gui_storage' : ['storage_name','primary_ip_address','ip_active'],
     'admin_gui_storage_additional_ip' : ['storage_id', 'additional_ip', 'ip_active'],
-    'admin_gui_virtual' : ['virtual_name','primary_ip_address','ip_active'],
-    'admin_gui_virtual_additional_ip' : ['virtual_id', 'additional_ip', 'ip_active'],        
+    'admin_gui_linux_virtual' : ['linux_virtual_name','primary_ip_address','ip_active'],
+    'admin_gui_linux_virtual_additional_ip' : ['linux_virtual_id', 'additional_ip', 'ip_active'],
+    'admin_gui_other_virtual' : ['other_virtual_name','primary_ip_address','ip_active'],
+    'admin_gui_other_virtual_additional_ip' : ['other_virtual_id', 'additional_ip', 'ip_active'],
+    'admin_gui_network' : ['network_name','primary_ip_address','ip_active'],
+    'admin_gui_network_additional_ip' : ['network_id', 'additional_ip', 'ip_active'],        
 }

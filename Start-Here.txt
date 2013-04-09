@@ -7,6 +7,15 @@ tar --exclude='linux-admin-toolkit/.git' --exclude='linux-admin-toolkit/document
 mv linux-admin-toolkit_current.tgz linux-admin-toolkit/installer_scripts/ 
 echo "Dont forget to refresh eclipse before doing a git commit"
 
+#debug
+#import
+cp -f data/server_inventory_import_export.xls /var/linux-admin-toolkit/; engine/spreadsheet/import_spreadsheet.py |tee /tmp/log.txt |less; grep -i error /tmp/log.txt
+#intialize
+cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/;./reinitialize_script.sh;cd ../frontend/; python manage.py nserver
+#export
+/home/sysadmin/workspace/linux-admin-toolkit/frontend/admin_gui/../../engine/spreadsheet/export_spreadsheet.py;  cp /var/linux-admin-toolkit/server_inventory_import_export.xls data/
+
+
 ----------------------------Installation Instructions Redhat EL 6.3----------------------------------------
 rm -f install.sh; wget http://linux-admin-toolkit.googlecode.com/git/installer_scripts/install.sh; chmod a+x install.sh
 ./install.sh pre-install

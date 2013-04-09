@@ -78,17 +78,32 @@ class Physical_Admin(admin.ModelAdmin):
 user_admin_site.register(Physical, Physical_Admin )
 
 # View list of all physical servers and blades.           
-class Virtual_Admin(admin.ModelAdmin):
-    list_display = ['virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
+class Linux_Virtual_Admin(admin.ModelAdmin):
+    list_display = ['linux_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
     list_filter=['host_physical_name','role','purpose','status']    
     ordering = ['primary_ip_address']
     search_fields = ['host_server_name','point_of_contact']
-    readonly_fields = ['virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
+    readonly_fields = ['linux_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
     def has_add_permission(self, request):
         # Nobody is allowed to add
         return False
     def has_delete_permission(self, request, obj=None):
         # Nobody is allowed to delete
         return False
-user_admin_site.register(Virtual, Virtual_Admin)
+user_admin_site.register(Linux_Virtual, Linux_Virtual_Admin)
+
+# View list of all physical servers and blades.           
+class Other_Virtual_Admin(admin.ModelAdmin):
+    list_display = ['other_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
+    list_filter=['host_physical_name','role','purpose','status']    
+    ordering = ['primary_ip_address']
+    search_fields = ['host_server_name','point_of_contact']
+    readonly_fields = ['other_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status']
+    def has_add_permission(self, request):
+        # Nobody is allowed to add
+        return False
+    def has_delete_permission(self, request, obj=None):
+        # Nobody is allowed to delete
+        return False
+user_admin_site.register(Other_Virtual, Other_Virtual_Admin)
    

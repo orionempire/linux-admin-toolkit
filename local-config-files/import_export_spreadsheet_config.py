@@ -12,20 +12,17 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','note', 8],
         ['default','ip_active','False'],
     ],
-    'enclosure_detail' : [
-        #[['enclosure','enclosure_name'],'enclosure_id', 1],
+    'enclosure_detail' : [        
         ['link',['enclosure','enclosure_name','enclosure_id'], 1],
         ['self','service_tag',6],
         ['self','model', 7 ]          
     ],
-    'enclosure_additional_ip' : [       
-        #[['enclosure','enclosure_name'],'enclosure_id', 1],
+    'enclosure_additional_ip' : [               
         ['link',['enclosure','enclosure_name','enclosure_id'], 1],
         ['self','additional_ip',2],
         ['default','ip_active','False'],
     ],
-    'enclosure_wire_run' : [
-        #[['enclosure','enclosure_name'],'enclosure_id', 1],
+    'enclosure_wire_run' : [        
         ['link',['enclosure','enclosure_name','enclosure_id'], 1],
         ['self','source_port',2],
         ['self','destination_name',3],
@@ -37,7 +34,6 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','role',3],
         ['self','purpose',4],
         ['self','point_of_contact',5],
-        #[['enclosure','enclosure_name'],'host_enclosure_name_id', 6],
         ['link',['enclosure','enclosure_name','host_enclosure_name_id'], 6],
         ['self','status',7],
         ['self','note',17],   
@@ -45,7 +41,6 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['default','selected','False'],     
     ],       
     'physical_detail' : [
-        #[['physical','physical_name'],'physical_id', 1],
         ['link',['physical','physical_name','physical_id'], 1],
         ['self','location_code',8],
         ['self','service_tag',9],
@@ -55,56 +50,72 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','size',13],   
         ['default','console_ip_active','False'],              
     ],
-    'physical_services' : [
-        #[['physical','physical_name'],'physical_id', 1],
+    'physical_services' : [        
         ['link',['physical','physical_name','physical_id'], 1],
         ['self','admin_cluster_group_01',14],
         ['self','admin_cluster_group_02',15],
         ['self','script_profile',16],
     ],
-    'physical_additional_ip' : [
-        #[['physical','physical_name'],'physical_id', 1],
+    'physical_additional_ip' : [        
         ['link',['physical','physical_name','physical_id'], 1],
         ['self','additional_ip',2], 
         ['default','ip_active','False'],           
     ],    
-    'physical_wire_run' : [
-        #[['physical','physical_name'],'physical_id', 1],
+    'physical_wire_run' : [        
         ['link',['physical','physical_name','physical_id'], 1],
         ['self','source_port',2],
         ['self','destination_name',3],
         ['self','destination_port',4],                        
     ],
-    'virtual' : [
-        ['self','virtual_name', 1],
+    'linux_virtual' : [
+        ['self','linux_virtual_name', 1],
         ['self','primary_ip_address',2],
         ['self','role',3],
         ['self','purpose',4],
-        ['self','point_of_contact', 5],  
-        #[['physical','physical_name'],'host_physical_name_id', 6],                  
+        ['self','point_of_contact', 5],                            
         ['link',['physical','physical_name','host_physical_name_id'], 6],
         ['self','status', 7],
         ['self','note', 14],  
         ['default','ip_active','False'],  
         ['default','selected','False'],        
     ],
-    'virtual_detail' : [
-        #[['virtual','virtual_name'],'virtual_id', 1],
-        ['link',['virtual','virtual_name','virtual_id'], 1],
+    'linux_virtual_detail' : [
+        ['link',['linux_virtual','linux_virtual_name','linux_virtual_id'], 1],
         ['self','size',8],
         ['self','os',9],
         ['self','base_image',10],           
     ],
-    'virtual_services' : [
-        #[['virtual','virtual_name'],'virtual_id', 1],
-        ['link',['virtual','virtual_name','virtual_id'], 1],
+    'linux_virtual_services' : [
+        ['link',['linux_virtual','linux_virtual_name','linux_virtual_id'], 1],
         ['self','admin_cluster_group_01',11],
         ['self','admin_cluster_group_02',12],
         ['self','script_profile',13],                   
     ],
-    'virtual_additional_ip' : [
-        #[['virtual','virtual_name'],'virtual_id', 1],
-        ['link',['virtual','virtual_name','virtual_id'], 1],
+    'linux_virtual_additional_ip' : [        
+        ['link',['linux_virtual','linux_virtual_name','linux_virtual_id'], 1],
+        ['self','additional_ip',2],    
+        ['default','ip_active','False'],        
+    ], 
+    'other_virtual' : [
+        ['self','other_virtual_name', 1],
+        ['self','primary_ip_address',2],
+        ['self','role',3],
+        ['self','purpose',4],
+        ['self','point_of_contact', 5],                            
+        ['link',['physical','physical_name','host_physical_name_id'], 6],
+        ['self','status', 7],
+        ['self','note', 14],  
+        ['default','ip_active','False'],  
+        ['default','selected','False'],        
+    ],
+    'other_virtual_detail' : [
+        ['link',['other_virtual','other_virtual_name','other_virtual_id'], 1],
+        ['self','size',8],
+        ['self','os',9],
+        ['self','base_image',10],           
+    ],    
+    'other_virtual_additional_ip' : [        
+        ['link',['other_virtual','other_virtual_name','other_virtual_id'], 1],
         ['self','additional_ip',2],    
         ['default','ip_active','False'],        
     ], 
@@ -121,20 +132,31 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['default','ip_active','False'],
     ],       
     'storage_additional_ip' : [
-        #[['storage','storage_name'],'storage_id', 1],
         ['link',['storage','storage_name','storage_id'], 1],
         ['self','additional_ip',2], 
         ['default','ip_active','False'],         
     ],
     'storage_wire_run' : [
-        #[['storage','storage_name'],'storage_id', 1],
         ['link',['storage','storage_name','storage_id'], 1],
         ['self','source_port',2],
         ['self','destination_name',3],
         ['self','destination_port',4],                        
     ],  
-    'auxilary' : [
-        ['self','auxilary_name',1],
+    'storage_volume' : [
+        ['self','volume_name',1],
+        ['self','size',2],
+        ['self','mount_point',3],
+        ['self','role',4],
+        ['self','purpose',5],
+        ['link',['storage','storage_name','host_storage_name_id'], 6],
+        ['self','status',7],        
+    ],       
+    'storage_volume_note' : [
+        ['link',['storage_volume','volume_name','storage_volume_id'], 1],
+        ['self','note',2],          
+    ],
+    'network' : [
+        ['self','network_name',1],
         ['self','primary_ip_address',2],
         ['self','purpose',3],
         ['self','point_of_contact',4],
@@ -145,10 +167,15 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','note',9], 
         ['default','ip_active','False'],
     ],       
-    'auxilary_additional_ip' : [
-        #[['storage','storage_name'],'storage_id', 1],
-        ['link',['auxilary','auxilary_name','auxilary_id'], 1],
+    'network_additional_ip' : [
+        ['link',['network','network_name','network_id'], 1],
         ['self','additional_ip',2], 
         ['default','ip_active','False'],         
-    ],                              
+    ], 
+    'network_wire_run' : [
+        ['link',['network','network_name','network_id'], 1],
+        ['self','source_port',2],
+        ['self','destination_name',3],
+        ['self','destination_port',4],                        
+    ],                               
 }
