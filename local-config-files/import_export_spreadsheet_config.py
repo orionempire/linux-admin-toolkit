@@ -104,9 +104,8 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','point_of_contact', 5],                            
         ['link',['physical','physical_name','host_physical_name_id'], 6],
         ['self','status', 7],
-        ['self','note', 14],  
-        ['default','ip_active','False'],  
-        ['default','selected','False'],        
+        ['self','note', 11],  
+        ['default','ip_active','False'],                  
     ],
     'other_virtual_detail' : [
         ['link',['other_virtual','other_virtual_name','other_virtual_id'], 1],

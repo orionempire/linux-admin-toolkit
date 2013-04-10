@@ -153,8 +153,7 @@ class Other_Virtual(models.Model):
     purpose = models.CharField(max_length=255,default="none")
     point_of_contact = models.CharField(max_length=255,default="none")    
     host_physical_name = models.ForeignKey(Physical, null=True, blank=True, on_delete=models.SET_NULL)
-    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')
-    selected = models.BooleanField(default=False)
+    status = models.CharField(max_length=255,choices=STATUS_CHOICES,default='planning')    
     ip_active = models.BooleanField(default=False)
     note = models.TextField(max_length=1024,default="none")       
     def __unicode__(self):        

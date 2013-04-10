@@ -96,8 +96,8 @@ class Other_Virtual_Additional_IP_Admin(admin.TabularInline):
     extra = 1
         
 class Other_Virtual_Admin(admin.ModelAdmin):
-    list_display = ['other_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status','selected','ip_active']    
-    list_editable = ['status','selected']
+    list_display = ['other_virtual_name','primary_ip_address','point_of_contact','role','purpose','host_physical_name','status','ip_active']    
+    list_editable = ['status']
     list_filter=['role','purpose','host_physical_name','status']
     ordering = ['primary_ip_address']
     search_fields = ['other_virtual_name','primary_ip_address','point_of_contact']
