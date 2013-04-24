@@ -74,7 +74,7 @@ class Physical_Detail(models.Model):
     os = models.CharField(max_length=255,blank=True)
     model = models.CharField(max_length=255,blank=True)
     size = models.CharField(max_length=255,blank=True)
-    console_ip_active = models.BooleanField(default=False)
+    ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
        return unicode(self.physical)
 

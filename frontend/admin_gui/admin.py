@@ -32,7 +32,7 @@ admin.site.register(Enclosure, Enclosure_Admin)
 # Admin view of all physical servers and blades.
 class Physical_Detail_Admin(admin.TabularInline):
     model = Physical_Detail
-    readonly_fields = ['console_ip_active']
+    readonly_fields = ['ip_active']
     
 class Physical_Services_Admin(admin.TabularInline):
     model = Physical_Services

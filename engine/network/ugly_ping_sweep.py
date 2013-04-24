@@ -17,7 +17,7 @@ config_file = imp.load_source('*', os.path.join(os.path.dirname(__file__), '../.
 def main() :
     db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db')) 
     
-    for table, columns in config_file.PING_SWEEP_TABLES.items() :
+    for table, columns in config_file.UGLY_PING_SWEEP_TABLES.items() :
         cursor = db_connection.cursor()
         
         print "Scanning table -> "+table

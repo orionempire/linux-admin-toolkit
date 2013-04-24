@@ -9,9 +9,9 @@ echo "Dont forget to refresh eclipse before doing a git commit"
 
 #debug
 #import
-cp -f data/server_inventory_import_export.xls /var/linux-admin-toolkit/; engine/spreadsheet/import_spreadsheet.py |tee /tmp/log.txt |less; grep -i error /tmp/log.txt
+cd /home/sysadmin/workspace/linux-admin-toolkit/; cp -f data/server_inventory_import_export.xls /var/linux-admin-toolkit/; engine/spreadsheet/import_spreadsheet.py |tee /tmp/log.txt |less; grep -i error /tmp/log.txt
 #intialize
-cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/;./reinitialize_script.sh;cd ../frontend/; python manage.py nserver
+cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/;./reinitialize_script.sh;cd ../frontend/; python manage.py runserver
 #export
 /home/sysadmin/workspace/linux-admin-toolkit/frontend/admin_gui/../../engine/spreadsheet/export_spreadsheet.py;  cp /var/linux-admin-toolkit/server_inventory_import_export.xls data/
 
