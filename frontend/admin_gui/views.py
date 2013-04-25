@@ -10,15 +10,15 @@ def ping_sweep(request):
     if not request.user.is_staff:
         return Http404
     else : 
-        cmd_to_run = os.path.join(os.path.dirname(__file__),'../../engine/network/ugly_ping_sweep.py >> /tmp/ping_sweep.log ')        
+        cmd_to_run = os.path.join(os.path.dirname(__file__),'../../engine/network/ping_sweep.py')        
         os.system("echo \""+cmd_to_run+"\" | at now")
-        return HttpResponse("Kicked off a ugly ping sweep. ("+cmd_to_run+")")
+        return HttpResponse("Kicked ping sweep. ("+cmd_to_run+")")
         
 def kill_ping_sweep(request):
     if not request.user.is_staff:
         return Http404
     else :                 
-        os.system(" kill $(ps aux | grep ugly_ping_sweep.py | grep python | awk '{ print $2 }')")
+        os.system(" kill $(ps aux | grep ping_sweep.py | grep python | awk '{ print $2 }')")
         return HttpResponse("Killed Ping sweep")
     
 def export_spreadsheet(request):

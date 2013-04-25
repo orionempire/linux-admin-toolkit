@@ -48,7 +48,7 @@ MODEL_TO_SPREADSHEET_MAP = {
         ['self','os',11],
         ['self','model',12],
         ['self','size',13],   
-        ['default','console_ip_active','False'],              
+        ['default','ip_active','False'],              
     ],
     'physical_services' : [        
         ['link',['physical','physical_name','physical_id'], 1],
