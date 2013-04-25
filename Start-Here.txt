@@ -1,17 +1,23 @@
 # Welcome to the linux admin toolkit 00.00.12
 
-# build command
+#------------------------------------------------------------
+# build for deployment command
+#------------------------------------------------------------
+cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/
+./reinitialize_script.sh
+#  Then ->
 cd /home/sysadmin/workspace 
 rm -f linux-admin-toolkit/installer_scripts/linux-admin-toolkit_current.tgz 
 tar --exclude='linux-admin-toolkit/.git' --exclude='linux-admin-toolkit/documentation/screenshots' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ 
 mv linux-admin-toolkit_current.tgz linux-admin-toolkit/installer_scripts/ 
 echo "Dont forget to refresh eclipse before doing a git commit"
+#------------------------------------------------------------
 
-#debug
-#import
-cd /home/sysadmin/workspace/linux-admin-toolkit/; cp -f data/server_inventory_import_export.xls /var/linux-admin-toolkit/; engine/spreadsheet/import_spreadsheet.py |tee /tmp/log.txt |less; grep -i error /tmp/log.txt
+
 #intialize
 cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/;./reinitialize_script.sh;cd ../frontend/; python manage.py runserver
+#import
+cd /home/sysadmin/workspace/linux-admin-toolkit/; cp -f data/server_inventory_import_export.xls /var/linux-admin-toolkit/; engine/spreadsheet/import_spreadsheet.py |tee /tmp/log.txt |less; grep -i error /tmp/log.txt
 #export
 /home/sysadmin/workspace/linux-admin-toolkit/frontend/admin_gui/../../engine/spreadsheet/export_spreadsheet.py;  cp /var/linux-admin-toolkit/server_inventory_import_export.xls data/
 

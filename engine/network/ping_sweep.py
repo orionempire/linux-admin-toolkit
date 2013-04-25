@@ -24,7 +24,6 @@ def main() :
         filename=config_file.RECONCILIATE_LOG_NAME, 
         format='%(asctime)s %(message)s', 
         datefmt='%m/%d/%Y %I:%M:%S %p',
-        filemode = 'a'
     )    
     logging.info("Starting ping sweep")
     print "Writing --> /var/linux-admin-toolkit/ip_reconciliate.txt"        
@@ -88,9 +87,9 @@ pass
 def build_pingable_ip_list() :
     nm=nmap.PortScanner()    
     for item in sorted(recorded_subnet_list) :          
-        nm.scan(hosts='192.168.16.0/24', arguments='-sn')
+        #nm.scan(hosts='192.168.16.0/24', arguments='-sn')
         logging.info("Scanning "+item+".0/24")
-        #nm.scan(hosts=item+'.0/24', arguments='-sn')
+        nm.scan(hosts=item+'.0/24', arguments='-sn')
         hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]
         for host, status in hosts_list:        
             if( status == "up" ) :
@@ -101,12 +100,34 @@ def build_pingable_ip_list() :
                 pass
             pass
         pass
-        break
+        #break
     pass
 pass
 
 def update_all_ip_actives() :
-   pass
+    db_connection = sqlite3.connect(os.path.join(os.path.dirname(__file__), '../../data/database.db')) 
+             
+    for table, columns in config_file.PING_SWEEP_TABLES.items() :
+        cursor = db_connection.cursor()
+                
+        query = "select "+columns[0]+" from "+config_file.PROJECT_TABLE_PREFIX+table
+        logging.debug("Executing query ->"+query)
+        cursor.execute(query)        
+        working_list = cursor.fetchall()        
+        
+        for item in working_list :            
+            if (recorded_ip_list[item[0]][1] == 'ACTIVE' ):
+                update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=1 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
+            else :
+                update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=0 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
+            pass
+            logging.debug("Executing update query ->"+update_query)            
+            cursor.execute(update_query)
+        pass
+    pass
+    
+    db_connection.commit()    
+    db_connection.close()    
 pass
 
 def print_formated_report() :
