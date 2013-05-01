@@ -5,7 +5,9 @@
 #------------------------------------------------------------
 cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/
 ./reinitialize_script.sh
+
 #  Then ->
+
 cd /home/sysadmin/workspace 
 rm -f linux-admin-toolkit/installer_scripts/linux-admin-toolkit_current.tgz 
 tar --exclude='linux-admin-toolkit/.git' --exclude='linux-admin-toolkit/documentation/screenshots' -cvzf  linux-admin-toolkit_current.tgz linux-admin-toolkit/ 
@@ -31,3 +33,9 @@ rm -f install.sh; wget http://linux-admin-toolkit.googlecode.com/git/installer_s
 cp /opt/linux-admin-toolkit/data/server_inventory_import_export.xls /var/linux-admin-toolkit/server_inventory_import_export.xls
 ./install.sh data-install
 
+
+
+ToDo
+---------------------------------------------
+Add version and location to title
+Fix bug - primary wont export if secondary record is not there.

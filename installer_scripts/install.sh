@@ -13,6 +13,7 @@ function pre-install(){
 	pip install Django
 	pip install xlwt
 	pip install xlrd
+	pip install python-nmap
 	yum -y install mod_wsgi
 	
 	##Install packages needed to run clusterssh
@@ -21,8 +22,7 @@ function pre-install(){
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/perl-X11-Protocol-0.56-4.el6.noarch.rpm
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/perl-Tk-804.028-12.el6.x86_64.rpm
 	rpm -Uvh http://linux-admin-toolkit.googlecode.com/files/clusterssh-3.28-2.el6.noarch.rpm
-	
-	code-install
+		
 }
 
 function code-install(){
@@ -46,6 +46,7 @@ function code-install(){
 	##Create the data location
 	mkdir  /var/linux-admin-toolkit/
 	chmod a+w /var/linux-admin-toolkit/
+	chown apache.apache  /var/linux-admin-toolkit/
 	touch /etc/clusters
 	chmod a+w /etc/clusters 
 	

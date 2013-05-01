@@ -25,8 +25,8 @@ class Enclosure(models.Model):
 # Model representing any additional IPs used by a blade enclosure.    
 class Enclosure_Detail(models.Model):  
     enclosure =  models.OneToOneField(Enclosure)
-    service_tag = models.CharField(max_length=255,blank=True)
-    model = models.CharField(max_length=255,blank=True)    
+    service_tag = models.CharField(max_length=255,default="none")
+    model = models.CharField(max_length=255,default="none")    
     def __unicode__(self):        
        return unicode(self.enclosure)
 
@@ -68,21 +68,21 @@ class Physical(models.Model):
 # A one to one extension of the physical machine list      
 class Physical_Detail(models.Model):
     physical = models.OneToOneField(Physical)    
-    location_code = models.CharField(max_length=255,blank=True)
-    service_tag = models.CharField(max_length=255,blank=True)
+    location_code = models.CharField(max_length=255,default="none")
+    service_tag = models.CharField(max_length=255,default="none")
     console_address = models.GenericIPAddressField(unique=True,blank=True,null=True)
-    os = models.CharField(max_length=255,blank=True)
-    model = models.CharField(max_length=255,blank=True)
-    size = models.CharField(max_length=255,blank=True)
+    os = models.CharField(max_length=255,default="none")
+    model = models.CharField(max_length=255,default="none")
+    size = models.CharField(max_length=255,default="none")
     ip_active = models.BooleanField(default=False)
     def __unicode__(self):        
        return unicode(self.physical)
 
 class Physical_Services(models.Model):
     physical = models.OneToOneField(Physical)
-    admin_cluster_group_01 = models.CharField(max_length=255,blank=True)
-    admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
-    script_profile = models.CharField(max_length=255,blank=True)
+    admin_cluster_group_01 = models.CharField(max_length=255,default="none")
+    admin_cluster_group_02 = models.CharField(max_length=255,default="none")
+    script_profile = models.CharField(max_length=255,default="none")
     def __unicode__(self):        
        return unicode(self.physical)
     
@@ -123,17 +123,17 @@ class Linux_Virtual(models.Model):
 # A one to one extension of the virtual machine list 
 class Linux_Virtual_Detail(models.Model):
     linux_virtual = models.OneToOneField(Linux_Virtual)
-    size = models.CharField(max_length=255,blank=True)
-    os = models.CharField(max_length=255,blank=True)
-    base_image = models.CharField(max_length=255,blank=True)
+    size = models.CharField(max_length=255,default="none")
+    os = models.CharField(max_length=255,default="none")
+    base_image = models.CharField(max_length=255,default="none")
     def __unicode__(self):        
         return unicode(self.linux_virtual)
     
 class Linux_Virtual_Services(models.Model):
     linux_virtual = models.OneToOneField(Linux_Virtual)
-    admin_cluster_group_01 = models.CharField(max_length=255,blank=True)
-    admin_cluster_group_02 = models.CharField(max_length=255,blank=True)
-    script_profile = models.CharField(max_length=255,blank=True)
+    admin_cluster_group_01 = models.CharField(max_length=255,default="none")
+    admin_cluster_group_02 = models.CharField(max_length=255,default="none")
+    script_profile = models.CharField(max_length=255,default="none")
     def __unicode__(self):        
         return unicode(self.linux_virtual)
     
@@ -162,9 +162,9 @@ class Other_Virtual(models.Model):
 # A one to one extension of the virtual machine list 
 class Other_Virtual_Detail(models.Model):
     other_virtual = models.OneToOneField(Other_Virtual)
-    size = models.CharField(max_length=255,blank=True)
-    os = models.CharField(max_length=255,blank=True)
-    base_image = models.CharField(max_length=255,blank=True)
+    size = models.CharField(max_length=255,default="none")
+    os = models.CharField(max_length=255,default="none")
+    base_image = models.CharField(max_length=255,default="none")
     def __unicode__(self):        
         return unicode(self.other_virtual)    
     

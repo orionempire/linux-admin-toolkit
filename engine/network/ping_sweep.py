@@ -89,7 +89,7 @@ def build_pingable_ip_list() :
     for item in sorted(recorded_subnet_list) :          
         #nm.scan(hosts='192.168.16.0/24', arguments='-sn')
         logging.info("Scanning "+item+".0/24")
-        nm.scan(hosts=item+'.0/24', arguments='-sn')
+        nm.scan(hosts=str(item+'.0/24'), arguments='-sn')
         hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]
         for host, status in hosts_list:        
             if( status == "up" ) :

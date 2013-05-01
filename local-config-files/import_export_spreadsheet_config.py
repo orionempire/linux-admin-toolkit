@@ -1,4 +1,5 @@
 SPREADSHEET_TO_USE_NAME = '/var/linux-admin-toolkit/server_inventory_import_export.xls'
+IMPORT_EXPORT_LOG_NAME = '/var/linux-admin-toolkit/import_export.log'
 
 PROJECT_TABLE_PREFIX= 'admin_gui_'
 

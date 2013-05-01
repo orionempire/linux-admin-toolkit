@@ -1,8 +1,17 @@
 from django.contrib import admin
 
 from admin_gui.models import *
+from django.forms.models import ModelForm
 
-
+#by defualt django wont save tables that do not have  unique values.
+#this messes up the export as the lookup querys fail. 
+#By forcing a changed answer we ensure that the tables are written with their default value none. 
+class AlwaysChangedModelForm(ModelForm):
+    def has_changed(self):
+        """ Should returns True if data differs from initial. 
+        By always returning true even unchanged inlines will get validated and saved."""
+        return True
+    
 # Admin view of all blade enclosures that can/will contain blades
 class Enclosure_Additional_IP_Admin(admin.TabularInline):
     model = Enclosure_Additional_IP
@@ -15,6 +24,8 @@ class Enclosure_Wire_Run_Admin(admin.TabularInline):
     
 class Enclosure_Detail_Admin(admin.TabularInline):
     model = Enclosure_Detail
+    form = AlwaysChangedModelForm
+    
     
 class Enclosure_Admin(admin.ModelAdmin):
     list_display = ['enclosure_name','primary_ip_address','location_code','point_of_contact','status','ip_active']    
@@ -28,15 +39,16 @@ class Enclosure_Admin(admin.ModelAdmin):
     
 admin.site.register(Enclosure, Enclosure_Admin)
 
-
 # Admin view of all physical servers and blades.
 class Physical_Detail_Admin(admin.TabularInline):
     model = Physical_Detail
     readonly_fields = ['ip_active']
+    form = AlwaysChangedModelForm
     
 class Physical_Services_Admin(admin.TabularInline):
     model = Physical_Services
     extra = 1
+    form = AlwaysChangedModelForm
 
 class Physical_Additional_IP_Admin(admin.TabularInline):
     model = Physical_Additional_IP
@@ -63,10 +75,12 @@ admin.site.register(Physical, Physical_Admin )
 class Linux_Virtual_Detail_Admin(admin.TabularInline):
     model = Linux_Virtual_Detail
     extra = 1
+    form = AlwaysChangedModelForm
 
 class Linux_Virtual_Services_Admin(admin.TabularInline):
     model = Linux_Virtual_Services
     extra = 1
+    form = AlwaysChangedModelForm
         
 class Linux_Virtual_Additional_IP_Admin(admin.TabularInline):
     model = Linux_Virtual_Additional_IP
@@ -89,6 +103,7 @@ admin.site.register(Linux_Virtual, Linux_Virtual_Admin)
 class Other_Virtual_Detail_Admin(admin.TabularInline):
     model = Other_Virtual_Detail
     extra = 1
+    form = AlwaysChangedModelForm
         
 class Other_Virtual_Additional_IP_Admin(admin.TabularInline):
     model = Other_Virtual_Additional_IP
