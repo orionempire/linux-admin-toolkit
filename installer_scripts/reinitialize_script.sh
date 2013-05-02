@@ -10,7 +10,7 @@ python manage.py syncdb --noinput
 python manage.py createsuperuser --username sysadmin --email sysadmin@linux-admin-toolkit.com --noinput
 
 #delme hashes to -> pbkdf2_sha256$10000$Q6pHBZBRK3X2$AHfB8wkd/qKpTFagSZ00UaHSkXpSq73RHGxHUrqm77M=
-#includes escaped characters in hash 
+#includes escaped characters in hash
 #echo 'UPDATE `auth_user` SET `password`='"'"pbkdf2_sha256\$10000\$Q6pHBZBRK3X2\$AHfB8wkd\/qKpTFagSZ00UaHSkXpSq73RHGxHUrqm77M="'"' WHERE `id`='"'"1"';" |sqlite3 ../data/database.db
 
 
@@ -32,4 +32,5 @@ EOF
 
 python manage.py changepassword sysadmin
 chown apache.apache ../data/database.db
+
 
