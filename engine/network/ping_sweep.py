@@ -70,30 +70,34 @@ def build_known_ip_list() :
             if(item[0] in recorded_ip_list) :                
                 logging.error("(NON-FATAL) IP Address "+item[0]+" is a duplicate")
                 file_out.write("ERROR -> IP Address "+item[0]+"("+catagory+") duplicate of "+str(recorded_ip_list[item[0]][0])+"("+str(recorded_ip_list[item[0]][2])+")\n")
-            else :
+            else :                                 
                 recorded_ip_list[item[0]] = [item[1],'INACTIVE',catagory]
             pass
             logging.debug("Counting IP ->"+str(item[0]))
-            if (not item[0]) :
+            try :
+                the_subnet = subnet_pattern.search(item[0]).group()
+            except Exception as e:
+                msg = "(NON-FATAL) -> IP ("+str(item[0])+") in "+str(recorded_ip_list[item[0]][0])+"("+str(recorded_ip_list[item[0]][2])+") Skipped"
+                msg += " for reason "+str(e)
+                print(msg)                
                 logging.debug("Blank Console IP Found and skipped ->"+str(item[0]))
-                continue
-            pass#endif
-            the_subnet = subnet_pattern.search(item[0]).group()        
-            if( the_subnet in recorded_subnet_list) :
-                recorded_subnet_list[the_subnet] += 1
-            else :
-                recorded_subnet_list[the_subnet] = 1
-            pass
-        pass  
-    pass        
+            else :                                
+                if( the_subnet in recorded_subnet_list) :
+                    recorded_subnet_list[the_subnet] += 1
+                else :
+                    recorded_subnet_list[the_subnet] = 1
+                pass #if
+            pass#try
+        pass #for 
+    pass#for        
     
     db_connection.close()
-pass
+pass#def
 
 def build_pingable_ip_list() :
     nm=nmap.PortScanner()    
     for item in sorted(recorded_subnet_list) :          
-        #nm.scan(hosts='192.168.16.0/24', arguments='-sn')
+        #nm.scan(hosts='192.168.100.0/30', arguments='-sn')
         logging.info("Scanning "+item+".0/24")
         nm.scan(hosts=str(item+'.0/24'), arguments='-sn')
         hosts_list = [(x, nm[x]['status']['state']) for x in nm.all_hosts()]
@@ -122,13 +126,17 @@ def update_all_ip_actives() :
         working_list = cursor.fetchall()        
         
         for item in working_list :            
-            if (recorded_ip_list[item[0]][1] == 'ACTIVE' ):
-                update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=1 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
-            else :
-                update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=0 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
-            pass
-            logging.debug("Executing update query ->"+update_query)            
-            cursor.execute(update_query)
+            try :
+                if (recorded_ip_list[item[0]][1] == 'ACTIVE' ):
+                    update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=1 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
+                else :
+                    update_query="UPDATE "+config_file.PROJECT_TABLE_PREFIX+table+" SET ip_active=0 "+"WHERE "+columns[0]+"=\""+item[0]+"\""
+                pass
+                logging.debug("Executing update query ->"+update_query)            
+                cursor.execute(update_query)
+            except Exception as e:
+                logging.info("Could not update ip_active record on "+str(table)+"-> "+str(columns[0])+"("+str(item[0])+") for reason -> "+str(e))
+            
         pass
     pass
     
