@@ -194,5 +194,3 @@ if __name__ == '__main__':
 pass#if
 
 #############################---------Notes------------#########################
-#SELECT enclosure_name,primary_ip_address , service_tag FROM admin_gui_enclosure LEFT JOIN admin_gui_enclosure_detail ON admin_gui_enclosure_detail.enclosure_id = admin_gui_enclosure.id
-#SELECT enclosure_name, primary_ip_address, point_of_contact, status, location_code, service_tag, model, note FROM admin_gui_enclosure  LEFT JOIN admin_gui_enclosure_detail ON admin_gui_enclosure_detail.enclosure_id = admin_gui_enclosure.id

@@ -9,9 +9,10 @@ Version 00.00.12
 Assumption : 
 '''
 
-import imp, os, logging, sqlite3, re, nmap
+import imp, os, logging, sqlite3, re, nmap, sys
 
 config_file = imp.load_source('*', os.path.join(os.path.dirname(__file__), '../../local-config-files/ping_sweep_config.py'))
+log_level = level=logging.INFO
 
 recorded_ip_list= {}
 recorded_subnet_list = {}
@@ -20,12 +21,12 @@ file_out = open(config_file.RECONCILIATE_REPORT_NAME,'w')
 def main() :
     #set up logging
     logging.basicConfig(
-        level=logging.INFO,
+        level=log_level,
         filename=config_file.RECONCILIATE_LOG_NAME, 
         format='%(asctime)s %(message)s', 
         datefmt='%m/%d/%Y %I:%M:%S %p',
     )    
-    logging.info("Starting ping sweep")
+    logging.info("=======================================Starting Ping Sweep ==============================================\n\n")
     print "Writing --> /var/linux-admin-toolkit/ip_reconciliate.txt"        
     #Call calculation functions
     build_known_ip_list() 
@@ -33,7 +34,7 @@ def main() :
     #Generate Reports
     update_all_ip_actives()
     print_formated_report()
-    logging.info("Finished ping sweep")
+    logging.info("=======================================Finished Ping Sweep ==============================================\n\n")
     file_out.close()       
 pass
 
@@ -72,6 +73,11 @@ def build_known_ip_list() :
             else :
                 recorded_ip_list[item[0]] = [item[1],'INACTIVE',catagory]
             pass
+            logging.debug("Counting IP ->"+str(item[0]))
+            if (not item[0]) :
+                logging.debug("Blank Console IP Found and skipped ->"+str(item[0]))
+                continue
+            pass#endif
             the_subnet = subnet_pattern.search(item[0]).group()        
             if( the_subnet in recorded_subnet_list) :
                 recorded_subnet_list[the_subnet] += 1
@@ -147,4 +153,9 @@ def print_formated_report() :
     pass 
 pass
 if __name__ == '__main__':
+    if (len(sys.argv) > 1):
+        if(sys.argv[1] == "debug"):
+            log_level = level=logging.DEBUG
+        pass
+    pass
     main()

@@ -38,4 +38,4 @@ cp /opt/linux-admin-toolkit/data/server_inventory_import_export.xls /var/linux-a
 ToDo
 ---------------------------------------------
 Add version and location to title
-Fix bug - primary wont export if secondary record is not there.
+Fix bug - if a console is blank on a physical server a exception is thrown.
