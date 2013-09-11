@@ -1,6 +1,18 @@
 # Welcome to the linux admin toolkit 00.00.12
 
 #------------------------------------------------------------
+# How to import the project for development
+#------------------------------------------------------------
+# -> CentOS Live DVD install
+# -> Install CentOs Eclipse
+# -> Add python from http://pydev.org/updates
+# -> Add egit from http://download.eclipse.org/egit/updates-2.1
+# -> File -> import -> GIT -> Projects from git -> URI -> https://code.google.com/p/linux-admin-toolkit/ ...
+
+
+
+
+#------------------------------------------------------------
 # build for deployment command
 #------------------------------------------------------------
 cd /home/sysadmin/workspace/linux-admin-toolkit/installer_scripts/
