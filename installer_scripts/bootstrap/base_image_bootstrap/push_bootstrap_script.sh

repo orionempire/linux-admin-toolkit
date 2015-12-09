@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#On the client
+#ssh-keygen
+#cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+
+
+scp /Users/daviddavidson/git/linux-admin-framework/linux-admin-framework/base_image_bootstrap/ubuntu_network_bootstrap.py sysadmin@10.4.10.249:network_bootstrap.py
+ssh sysadmin@10.4.10.249 << here_doc_sentinal
+chmod a+x network_bootstrap.py
+sed -i 's/linux_admin_framework_change_me.com/changeme.com/g' network_bootstrap.py
+here_doc_sentinal
